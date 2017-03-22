@@ -28,7 +28,6 @@ abstract class AbstractSocialController extends Controller
             ->redirect();
     }
 
-
     /**
      * Social redirect redirects to back here afterwards
      */
