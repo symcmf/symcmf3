@@ -19,7 +19,7 @@ security:
             security: false
 
         main:
-            anonymous: ~
+            anonymous: true
             guard:
                 authenticators:
                     - app.form_login_authenticator
