@@ -4,6 +4,19 @@ parameters:
     #parameter_name: value
 
 services:
+
     app.form_login_authenticator:
-        class: AppBundle\Security\FormLoginAuthenticator
+        class: AuthBundle\Security\FormLoginAuthenticator
         arguments: ["@router", "@security.password_encoder"]
+
+    app.service.user:
+        class: AppBundle\Services\UserService
+        arguments: ['@doctrine.orm.default_entity_manager', '@security.password_encoder', '@service_container']
+
+    auth.service.social:
+        class: AuthBundle\Services\SocialService
+        arguments: ['@doctrine.orm.default_entity_manager', '@app.service.user', '@session', '@service_container']
+
+    auth.service.social.facebook:
+        class: AuthBundle\Services\FacebookService
+        arguments: ['@doctrine.orm.default_entity_manager', '@app.service.user', '@session', '@service_container']

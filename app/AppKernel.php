@@ -20,7 +20,10 @@ class AppKernel extends Kernel
             // EasyAdminBundle
             new JavierEguiluz\Bundle\EasyAdminBundle\EasyAdminBundle(),
 
+            new AuthBundle\AuthBundle(),
+            // Social Auth
             new KnpU\OAuth2ClientBundle\KnpUOAuth2ClientBundle(),
+
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {

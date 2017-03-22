@@ -1,16 +1,12 @@
 <?php
 
-namespace AppBundle\Controller;
+namespace AuthBundle\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
 class SecurityController extends Controller
 {
-    /**
-     * @Route("/login/", name="login")
-     */
     public function loginAction(Request $request)
     {
         $helper = $this->get('security.authentication_utils');
@@ -22,21 +18,5 @@ class SecurityController extends Controller
                 'error'         => $helper->getLastAuthenticationError(),
             )
         );
-    }
-
-    /**
-     * @Route("/login_check", name="security_login_check")
-     */
-    public function loginCheckAction()
-    {
-
-    }
-
-    /**
-     * @Route("/logout", name="logout")
-     */
-    public function logoutAction()
-    {
-
     }
 }

@@ -1,5 +1,5 @@
 <?php
-namespace AppBundle\Security;
+namespace AuthBundle\Security;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -13,17 +13,39 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Guard\Authenticator\AbstractFormLoginAuthenticator;
 use Symfony\Component\Security\Core\Security;
 
+/**
+ * Class FormLoginAuthenticator
+ * @package AuthBundle\Security
+ */
 class FormLoginAuthenticator extends AbstractFormLoginAuthenticator
 {
+    /**
+     * @var RouterInterface
+     */
     private $router;
+
+    /**
+     * @var UserPasswordEncoderInterface
+     */
     private $encoder;
 
+    /**
+     * FormLoginAuthenticator constructor.
+     *
+     * @param RouterInterface $router
+     * @param UserPasswordEncoderInterface $encoder
+     */
     public function __construct(RouterInterface $router, UserPasswordEncoderInterface $encoder)
     {
         $this->router = $router;
         $this->encoder = $encoder;
     }
 
+    /**
+     * @param Request $request
+     *
+     * @return array|void
+     */
     public function getCredentials(Request $request)
     {
         if ($request->getPathInfo() != '/login_check') {
@@ -40,6 +62,12 @@ class FormLoginAuthenticator extends AbstractFormLoginAuthenticator
         ];
     }
 
+    /**
+     * @param mixed $credentials
+     * @param UserProviderInterface $userProvider
+     *
+     * @return UserInterface
+     */
     public function getUser($credentials, UserProviderInterface $userProvider)
     {
         $email = $credentials['email'];
@@ -47,6 +75,12 @@ class FormLoginAuthenticator extends AbstractFormLoginAuthenticator
         return $userProvider->loadUserByUsername($email);
     }
 
+    /**
+     * @param mixed $credentials
+     * @param UserInterface $user
+     *
+     * @return bool
+     */
     public function checkCredentials($credentials, UserInterface $user)
     {
         $plainPassword = $credentials['password'];
@@ -57,13 +91,26 @@ class FormLoginAuthenticator extends AbstractFormLoginAuthenticator
         throw new BadCredentialsException();
     }
 
+    /**
+     * @param Request $request
+     * @param TokenInterface $token
+     * @param string $providerKey
+     *
+     * @return RedirectResponse
+     */
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
     {
-        $url = $this->router->generate('welcome');
+        $url = $this->router->generate('homepage');
 
         return new RedirectResponse($url);
     }
 
+    /**
+     * @param Request $request
+     * @param AuthenticationException $exception
+     *
+     * @return RedirectResponse
+     */
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
     {
         $request->getSession()->set(Security::AUTHENTICATION_ERROR, $exception);
@@ -73,16 +120,25 @@ class FormLoginAuthenticator extends AbstractFormLoginAuthenticator
         return new RedirectResponse($url);
     }
 
+    /**
+     * @return string
+     */
     protected function getLoginUrl()
     {
         return $this->router->generate('login');
     }
 
+    /**
+     * @return string
+     */
     protected function getDefaultSuccessRedirectUrl()
     {
-        return $this->router->generate('welcome');
+        return $this->router->generate('homepage');
     }
 
+    /**
+     * @return bool
+     */
     public function supportsRememberMe()
     {
         return false;

@@ -7,13 +7,15 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
-
 /**
  * User
  *
  * @ORM\Table(name="user")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
  * @UniqueEntity(fields="email", message="This email address is already in use")
+ * @UniqueEntity(fields="facebookId", message="This facebook id is already in use")
+ * @UniqueEntity(fields="googleId", message="This google id is already in use")
+ * @UniqueEntity(fields="twitterId", message="This twitter id is already in use")
  */
 class User implements UserInterface
 {
@@ -25,7 +27,6 @@ class User implements UserInterface
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-
 
     /**
      * Get id
@@ -70,71 +71,194 @@ class User implements UserInterface
      */
     protected $password;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", unique=true, nullable=true)
+     */
+    protected $facebookId;
+
+    /**
+     * @return mixed
+     */
+    public function getFacebookId()
+    {
+        return $this->facebookId;
+    }
+
+    /**
+     * @param $facebookId
+     *
+     * @return $this
+     */
+    public function setFacebookId($facebookId)
+    {
+        $this->facebookId = $facebookId;
+
+        return $this;
+    }
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", unique=true, nullable=true)
+     */
+    protected $googleId;
+
+    /**
+     * @return mixed
+     */
+    public function getGoogleId()
+    {
+        return $this->googleId;
+    }
+
+    /**
+     * @param $googleId
+     *
+     * @return $this
+     */
+    public function setGoogleId($googleId)
+    {
+        $this->googleId = $googleId;
+
+        return $this;
+    }
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", unique=true, nullable=true)
+     */
+    protected $twitterId;
+
+    /**
+     * @param $twitterId
+     *
+     * @return $this
+     */
+    public function setTwitterId($twitterId)
+    {
+        $this->twitterId = $twitterId;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTwitterId()
+    {
+        return $this->twitterId;
+    }
+
+    /**
+     * @return null
+     */
     public function eraseCredentials()
     {
         return null;
     }
 
+    /**
+     * @return string
+     */
     public function getRole()
     {
         return $this->role;
     }
 
+    /**
+     * @param null $role
+     */
     public function setRole($role = null)
     {
         $this->role = $role;
     }
 
+    /**
+     * @return array
+     */
     public function getRoles()
     {
         return [$this->getRole()];
     }
 
+    /**
+     * @param $name
+     */
     public function setName($name)
     {
         $this->name = $name;
     }
 
+    /**
+     * @return string
+     */
     public function getName()
     {
         return $this->name;
     }
 
+    /**
+     * @return string
+     */
     public function getUsername()
     {
         return $this->email;
     }
 
+    /**
+     * @return string
+     */
     public function getEmail()
     {
         return $this->email;
     }
 
+    /**
+     * @param $email
+     */
     public function setEmail($email)
     {
         $this->email = $email;
     }
 
+    /**
+     * @return string
+     */
     public function getPassword()
     {
         return $this->password;
     }
 
+    /**
+     * @param $password
+     */
     public function setPassword($password)
     {
         $this->password = $password;
     }
 
+    /**
+     * @return mixed
+     */
     public function getPlainPassword()
     {
         return $this->plainPassword;
     }
 
+    /**
+     * @param $plainPassword
+     */
     public function setPlainPassword($plainPassword)
     {
         $this->plainPassword = $plainPassword;
     }
 
+    /**
+     * @return null
+     */
     public function getSalt()
     {
         return null;
