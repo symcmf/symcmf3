@@ -8,7 +8,7 @@ use Swift_Mime_Message;
 
 /**
  * Class MailerService
- * @package EmailBundle\Services
+ * @package MessageBundle\Services\Mailers
  */
 class MailerService
 {

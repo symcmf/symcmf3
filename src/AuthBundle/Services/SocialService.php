@@ -2,12 +2,10 @@
 
 namespace AuthBundle\Services;
 
-
 use AppBundle\Entity\User;
 use AppBundle\Services\AbstractService;
 use AppBundle\Services\UserService;
 use Doctrine\ORM\EntityManager;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 abstract class SocialService extends AbstractService
 {
