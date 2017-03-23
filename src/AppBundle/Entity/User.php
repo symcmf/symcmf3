@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\Entity\Traits\TimestampableTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -16,15 +17,19 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @UniqueEntity(fields="facebookId", message="This facebook id is already in use")
  * @UniqueEntity(fields="googleId", message="This google id is already in use")
  * @UniqueEntity(fields="twitterId", message="This twitter id is already in use")
+ * @ORM\HasLifecycleCallbacks()
  */
 class User implements UserInterface
 {
+    use TimestampableTrait;
+
     /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @ORM\OneToOne(targetEntity="UserActivations", mappedBy="userId")
      */
     private $id;
 
@@ -70,6 +75,29 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=64)
      */
     protected $password;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(type="boolean")
+     */
+    protected $activated = false;
+
+    /**
+     * @param $activated
+     */
+    public function setActivated($activated)
+    {
+        $this->activated = $activated;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isActivated()
+    {
+        return $this->activated;
+    }
 
     /**
      * @var string

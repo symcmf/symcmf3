@@ -20,3 +20,8 @@ parameters:
 
     facebook_app_id: id
     facebook_app_secret: secret
+
+    admin_address: super@mail.com
+    admin_name: Admin
+
+    title: 'Symfony3 CMF'

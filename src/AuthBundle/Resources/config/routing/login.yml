@@ -11,3 +11,7 @@ logout:
 register:
     path:      /register
     defaults:  { _controller: AuthBundle:Registration:register }
+
+confirmation:
+    path:     /login/confirmation/{token}
+    defaults: { _controller: AuthBundle:Security:confirmation }

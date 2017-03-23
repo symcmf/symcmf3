@@ -23,8 +23,8 @@ class RegistrationController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $userService = $this->get('app.service.user');
-            $userService->addUser($user);
+            $user = $this->get('app.service.user')->addUser($user);
+            $this->get('auth.service.activation')->sendConfirmationMessage($user, $request->getSchemeAndHttpHost());
 
             return $this->redirectToRoute('login');
         }

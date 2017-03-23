@@ -80,10 +80,18 @@ class FormLoginAuthenticator extends AbstractFormLoginAuthenticator
      * @param UserInterface $user
      *
      * @return bool
+     *
+     * @throws AuthenticationException
+     * @throws BadCredentialsException
      */
     public function checkCredentials($credentials, UserInterface $user)
     {
         $plainPassword = $credentials['password'];
+
+        if (!$user->isActivated()) {
+            throw new AuthenticationException();
+        }
+
         if ($this->encoder->isPasswordValid($user, $plainPassword)) {
             return true;
         }

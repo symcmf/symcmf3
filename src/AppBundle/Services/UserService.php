@@ -4,23 +4,14 @@ namespace AppBundle\Services;
 
 use AppBundle\Entity\User;
 use Doctrine\ORM\EntityManager;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
-class UserService
+class UserService extends AbstractService
 {
-    /**
-     * @var EntityManager
-     */
-    protected $entityManager;
-
     /**
      * @var
      */
     protected $encoder;
-
-    /**
-     * @var
-     */
-    protected $container;
 
     /**
      * UserService constructor.
@@ -29,38 +20,37 @@ class UserService
      * @param $passwordEncoder
      * @param $container
      */
-    public function __construct(EntityManager $entityManager, $passwordEncoder, $container)
+    public function __construct(EntityManager $entityManager, $container,  $passwordEncoder)
     {
-        $this->entityManager = $entityManager;
+        parent::__construct($entityManager, $container);
         $this->encoder = $passwordEncoder;
-        $this->container = $container;
     }
 
     /**
-     * @param $object
+     * @param User $user
      *
-     * @return null
+     * @return bool
      */
-    private function saveObject($object)
+    public function setAuth(User $user)
     {
-        // TODO create abstract service for all entities with this function
         try {
 
-            // Save
-            $this->entityManager->persist($object);
-            $this->entityManager->flush();
+            $token = new UsernamePasswordToken($user, null, 'secured_area', $user->getRoles());
+            $this->container->get('security.token_storage')->setToken($token);
+            $this->container->get('session')->set('_security_secured_area', serialize($token));
 
-            return $object;
+            return true;
 
         } catch (\Exception $exception) {
-            return null;
+
+            return false;
         }
     }
 
     /**
      * @param $email
      *
-     * @return null|User
+     * @return User|null
      */
     public function findUserByEmail($email)
     {
@@ -72,13 +62,31 @@ class UserService
     /**
      * @param $id
      *
-     * @return null|object
+     * @return User|null
      */
     public function findUserByFacebookId($id)
     {
         return $this->entityManager
             ->getRepository(User::class)
             ->findOneBy(['facebookId' => $id]);
+    }
+
+    /**
+     * @param $id
+     *
+     * @return User|null
+     */
+    public function ActivatedUserById($id)
+    {
+        $user = $this->entityManager->getRepository(User::class)->find($id);
+
+        if (!$user) {
+            return null;
+        }
+
+        $user->setActivated(true);
+
+        return $this->updateObject($user);
     }
 
     /**
@@ -91,12 +99,18 @@ class UserService
      */
     public function addUser(User $user, $socialId = null, $name = null, $email = null)
     {
-        if ($name) {
-            $user->setName($name);
+        if ($email) {
+
+            $user = $this->findUserByEmail($email);
+            if ($user) {
+                return $user;
+            }
+
+            $user->setEmail($email);
         }
 
-        if ($email) {
-            $user->setEmail($email);
+        if ($name) {
+            $user->setName($name);
         }
 
         // Encode the new users password

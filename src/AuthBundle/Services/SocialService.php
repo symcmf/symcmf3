@@ -4,22 +4,13 @@ namespace AuthBundle\Services;
 
 
 use AppBundle\Entity\User;
+use AppBundle\Services\AbstractService;
 use AppBundle\Services\UserService;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
-abstract class SocialService
+abstract class SocialService extends AbstractService
 {
-    /**
-     * @var EntityManager
-     */
-    protected $entityManager;
-
-    /**
-     * @var
-     */
-    protected $container;
-
     /**
      * @var UserService
      */
@@ -37,33 +28,11 @@ abstract class SocialService
      * @param $session
      * @param $container
      */
-    public function __construct(EntityManager $entityManager, UserService $userService, $session, $container)
+    public function __construct(EntityManager $entityManager, $container, UserService $userService, $session)
     {
-        $this->entityManager = $entityManager;
+        parent::__construct($entityManager, $container);
         $this->userService = $userService;
         $this->session = $session;
-        $this->container = $container;
-    }
-
-    /**
-     * @param User $user
-     *
-     * @return bool
-     */
-    private function setAuth(User $user)
-    {
-        try {
-
-            $token = new UsernamePasswordToken($user, null, 'secured_area', $user->getRoles());
-            $this->container->get('security.token_storage')->setToken($token);
-            $this->session->set('_security_secured_area', serialize($token));
-
-            return true;
-
-        } catch (\Exception $exception) {
-
-            return false;
-        }
     }
 
     /**
@@ -84,16 +53,12 @@ abstract class SocialService
 
         $user = new User();
         $user = $this->setSocialId($socialUser->getId(), $user);
+        $user->setActivated(true);
 
-        $this->userService->addUser(
-            $user,
-            $socialUser->getId(),
-            $name,
-            $socialUser->getEmail()
-        );
+        $user = $this->userService->addUser($user, $socialUser->getId(), $name, $socialUser->getEmail());
 
         if ($user) {
-            return $this->setAuth($user);
+            return $this->userService->setAuth($user);
         }
 
         return false;

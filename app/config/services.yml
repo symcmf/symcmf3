@@ -9,14 +9,26 @@ services:
         class: AuthBundle\Security\FormLoginAuthenticator
         arguments: ["@router", "@security.password_encoder"]
 
+    app.service.abstract:
+        class: AppBundle\Services\AbstractService
+        arguments: ['@doctrine.orm.default_entity_manager', '@service_container']
+
     app.service.user:
         class: AppBundle\Services\UserService
-        arguments: ['@doctrine.orm.default_entity_manager', '@security.password_encoder', '@service_container']
+        arguments: ['@doctrine.orm.default_entity_manager', '@service_container', '@security.password_encoder']
 
     auth.service.social:
         class: AuthBundle\Services\SocialService
-        arguments: ['@doctrine.orm.default_entity_manager', '@app.service.user', '@session', '@service_container']
+        arguments: ['@doctrine.orm.default_entity_manager', '@service_container', '@app.service.user', '@session']
 
     auth.service.social.facebook:
         class: AuthBundle\Services\FacebookService
-        arguments: ['@doctrine.orm.default_entity_manager', '@app.service.user', '@session', '@service_container']
+        arguments: ['@doctrine.orm.default_entity_manager', '@service_container', '@app.service.user', '@session']
+
+    msg.service.mailer:
+        class: MessageBundle\Services\Mailers\MailerService
+        arguments: ['@mailer', '%admin_address%']
+
+    auth.service.activation:
+        class: AuthBundle\Services\ActivationService
+        arguments: ['@doctrine.orm.default_entity_manager', '@service_container', '@app.service.user', '@msg.service.mailer', '%title%']

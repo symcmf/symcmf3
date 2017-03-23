@@ -4,6 +4,7 @@ namespace AuthBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 class SecurityController extends Controller
 {
@@ -18,10 +19,19 @@ class SecurityController extends Controller
 
         return $this->render(
             'auth/login.html.twig',
-            array(
+            [
                 'last_username' => $helper->getLastUsername(),
                 'error'         => $helper->getLastAuthenticationError(),
-            )
+            ]
         );
+    }
+
+    public function confirmationAction($token)
+    {
+        if ($user = $this->get('auth.service.activation')->activateUser($token)) {
+            $this->get('app.service.user')->setAuth($user);
+        }
+
+        return $this->redirect('/');
     }
 }
