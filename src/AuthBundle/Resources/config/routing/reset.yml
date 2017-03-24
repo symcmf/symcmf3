@@ -1,0 +1,12 @@
+forgot_password:
+    path:      /forgot/password
+    defaults:  { _controller: AuthBundle:ForgotPassword:enterEmail }
+
+send_password_email:
+    path:     /forgot/password/check
+    defaults:  { _controller: AuthBundle:ForgotPassword:sendPasswordResetEmail }
+    methods:  [POST]
+
+reset_password:
+    path:     /reset/password/{token}
+    defaults:  { _controller: AuthBundle:ForgotPassword:resetPassword }

@@ -1,0 +1,24 @@
+easy_admin:
+    entities:
+        User:
+            class: AuthBundle\Entity\User
+            controller: AuthBundle\Controller\UserAdminController
+            edit:
+                fields:
+                    - email
+                    - name
+                    - { property: 'role', label: 'Role', type: 'choice', type_options: { choices: { 'User': 'ROLE_USER', 'Admin': 'ROLE_ADMIN' } }}
+                    - activated
+                    - facebookId
+                    - googleId
+                    - twitterId
+            new:
+                fields:
+                    - email
+                    - name
+                    - password
+                    - { property: 'role', label: 'Role', type: 'choice', type_options: { choices: { 'User': 'ROLE_USER', 'Admin': 'ROLE_ADMIN' } }}
+                    - activated
+                    - facebookId
+                    - googleId
+                    - twitterId

@@ -2,8 +2,13 @@
 # http://symfony.com/doc/current/security.html
 security:
 
+    encoders:
+        AuthBundle\Entity\User: bcrypt
+
     # http://symfony.com/doc/current/security.html#b-configuring-how-users-are-loaded
     providers:
+        database_users:
+            entity: { class: AuthBundle:User, property: email }
         in_memory:
             memory: ~
 
@@ -14,11 +19,21 @@ security:
             security: false
 
         main:
-            anonymous: ~
-            # activate different ways to authenticate
+            anonymous: true
+            guard:
+                authenticators:
+                    - app.form_login_authenticator
+            logout:
+                path: /logout
+                target: /
 
-            # http://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
-            #http_basic: ~
+    access_control:
+          - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+          - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
 
-            # http://symfony.com/doc/current/cookbook/security/form_login_setup.html
-            #form_login: ~
+          # Secured part of the site
+          # This config requires being logged for the whole site
+          # and having the admin role for the admin part.
+          # Change these rules to adapt them to your needs
+          - { path: ^/admin/, role: [ROLE_ADMIN] }
+          - { path: ^/.*, role: IS_AUTHENTICATED_ANONYMOUSLY }

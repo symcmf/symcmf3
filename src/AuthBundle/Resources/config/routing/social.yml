@@ -1,0 +1,7 @@
+facebook_auth:
+    path:      /login/facebook
+    defaults:  { _controller: AuthBundle:Facebook:connect }
+
+connect_facebook_check:
+    path:      /login/facebook/check
+    defaults:  { _controller: AuthBundle:Facebook:connectCheck }

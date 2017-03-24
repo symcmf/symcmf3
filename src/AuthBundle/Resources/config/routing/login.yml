@@ -1,0 +1,17 @@
+login:
+    path:      /login
+    defaults:  { _controller: AuthBundle:Security:login }
+
+security_login_check:
+    path:      /login_check
+
+logout:
+    path:      /logout
+
+register:
+    path:      /register
+    defaults:  { _controller: AuthBundle:Registration:register }
+
+confirmation:
+    path:     /login/confirmation/{token}
+    defaults: { _controller: AuthBundle:Security:confirmation }
