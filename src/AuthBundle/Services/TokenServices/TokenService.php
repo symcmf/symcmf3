@@ -9,6 +9,10 @@ use AuthBundle\Entity\UserToken;
 use Doctrine\ORM\EntityManager;
 use MessageBundle\Services\Mailers\MailerService;
 
+/**
+ * Class TokenService
+ * @package AuthBundle\Services\TokenServices
+ */
 class TokenService extends AbstractService
 {
     /**

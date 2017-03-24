@@ -7,6 +7,10 @@ use AuthBundle\Entity\User;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
+/**
+ * Class UserService
+ * @package AuthBundle\Services
+ */
 class UserService extends AbstractService
 {
     /**

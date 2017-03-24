@@ -4,6 +4,10 @@ namespace AuthBundle\Services\TokenServices;
 
 use AuthBundle\Entity\User;
 
+/**
+ * Class ConfirmationService
+ * @package AuthBundle\Services\TokenServices
+ */
 class ConfirmationService extends TokenService  implements TokenMessageInterface
 {
     const CONFIRMATION_SUBJECT = 'Confirmation message';

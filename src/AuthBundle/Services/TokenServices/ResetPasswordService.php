@@ -4,6 +4,10 @@ namespace AuthBundle\Services\TokenServices;
 
 use AuthBundle\Entity\User;
 
+/**
+ * Class ResetPasswordService
+ * @package AuthBundle\Services\TokenServices
+ */
 class ResetPasswordService extends TokenService implements TokenMessageInterface
 {
     const RESET_SUBJECT = 'Reset password';
@@ -62,6 +66,11 @@ class ResetPasswordService extends TokenService implements TokenMessageInterface
         return $this->mailer->send();
     }
 
+    /**
+     * @param $token
+     *
+     * @return User|null
+     */
     public function getUserByToken($token)
     {
         $userToken = $this->findUserTokenByToken($token);
@@ -73,6 +82,12 @@ class ResetPasswordService extends TokenService implements TokenMessageInterface
         return $this->userService->findUserById($userToken->getUserId());
     }
 
+    /**
+     * @param $user
+     * @param $token
+     *
+     * @return bool
+     */
     public function changePassword($user, $token)
     {
         $this->removeUserToken($token);
@@ -81,6 +96,12 @@ class ResetPasswordService extends TokenService implements TokenMessageInterface
         return $this->userService->setAuth($user);
     }
 
+    /**
+     * @param $email
+     * @param $host
+     *
+     * @return bool
+     */
     public function sendResetMessage($email, $host)
     {
         $user = $this->userService->findUserByEmail($email);

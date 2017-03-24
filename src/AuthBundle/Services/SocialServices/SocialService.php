@@ -7,6 +7,10 @@ use AppBundle\Services\AbstractService;
 use AuthBundle\Services\UserService;
 use Doctrine\ORM\EntityManager;
 
+/**
+ * Class SocialService
+ * @package AuthBundle\Services\SocialServices
+ */
 abstract class SocialService extends AbstractService
 {
     /**

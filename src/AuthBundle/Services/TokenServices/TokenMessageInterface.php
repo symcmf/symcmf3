@@ -4,6 +4,10 @@ namespace AuthBundle\Services\TokenServices;
 
 use AuthBundle\Entity\User;
 
+/**
+ * Interface TokenMessageInterface
+ * @package AuthBundle\Services\TokenServices
+ */
 interface TokenMessageInterface
 {
     /**

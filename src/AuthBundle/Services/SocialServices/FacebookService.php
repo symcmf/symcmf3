@@ -4,6 +4,10 @@ namespace AuthBundle\Services\SocialServices;
 
 use AuthBundle\Entity\User;
 
+/**
+ * Class FacebookService
+ * @package AuthBundle\Services\SocialServices
+ */
 class FacebookService extends SocialService
 {
     /**
