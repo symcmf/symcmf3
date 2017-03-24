@@ -75,7 +75,7 @@ class ActivationService extends AbstractService
      *
      * @return null|object
      */
-    private function findUserActivationById($id)
+    public function findUserActivationById($id)
     {
         return $this->entityManager
             ->getRepository(UserActivations::class)
@@ -87,20 +87,14 @@ class ActivationService extends AbstractService
      *
      * @return null|object
      */
-    private function findUserActivationByToken($token)
+    public function findUserActivationByToken($token)
     {
         return $this->entityManager
             ->getRepository(UserActivations::class)
             ->findOneBy(['token' => $token]);
     }
 
-    /**
-     * @return string - token
-     */
-    private function getToken()
-    {
-        return hash_hmac('sha256', random_bytes(40), $this->keyForToken);
-    }
+
 
     /**
      * @param $user
@@ -202,7 +196,7 @@ class ActivationService extends AbstractService
             return null;
         }
 
-        $user = $this->userService->ActivatedUserById($userActivate->getUserId());
+        $user = $this->userService->activatedUserById($userActivate->getUserId());
         $this->removeObject($userActivate);
 
         return $user;

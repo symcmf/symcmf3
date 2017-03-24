@@ -48,6 +48,18 @@ class UserService extends AbstractService
     }
 
     /**
+     * @param $id
+     *
+     * @return User|null
+     */
+    public function findUserById($id)
+    {
+        return $this->entityManager
+            ->getRepository(User::class)
+            ->find($id);
+    }
+
+    /**
      * @param $email
      *
      * @return User|null
@@ -72,17 +84,28 @@ class UserService extends AbstractService
     }
 
     /**
+     * @param User $user
+     *
+     * @return User|null
+     */
+    public function changePassword(User $user)
+    {
+        $password = $this->encoder->encodePassword($user, $user->getPlainPassword());
+        $user->setPassword($password);
+
+        return $this->updateObject($user);
+    }
+
+    /**
      * @param $id
      *
      * @return User|null
      */
-    public function ActivatedUserById($id)
+    public function activatedUserById($id)
     {
         $user = $this->entityManager->getRepository(User::class)->find($id);
 
-        if (!$user) {
-            return null;
-        }
+        if (!$user) { return null; }
 
         $user->setActivated(true);
 
@@ -102,16 +125,13 @@ class UserService extends AbstractService
         if ($email) {
 
             $user = $this->findUserByEmail($email);
-            if ($user) {
-                return $user;
-            }
+
+            if ($user) { return $user; }
 
             $user->setEmail($email);
         }
 
-        if ($name) {
-            $user->setName($name);
-        }
+        if ($name) { $user->setName($name); }
 
         // Encode the new users password
         if ($socialId) {
@@ -119,6 +139,7 @@ class UserService extends AbstractService
         } else {
             $password = $this->encoder->encodePassword($user, $user->getPlainPassword());
         }
+
         $user->setPassword($password);
 
         // Set role
