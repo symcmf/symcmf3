@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+    <file source-language="en" target-language="en" datatype="plaintext" original="file.ext">
+        <body>
+
+            <trans-unit id="check_email">
+                <source>check_email</source>
+                <target>An email has been sent to %email%. It contains a link you must click to reset your password.</target>
+            </trans-unit>
+
+            <trans-unit id="success_reset">
+                <source>success_reset</source>
+                <target>The password has been reset successfully</target>
+            </trans-unit>
+
+            <trans-unit id="invalid_token">
+                <source>invalid_token</source>
+                <target>Invalid token</target>
+            </trans-unit>
+
+            <trans-unit id="unknown_email">
+                <source>unknown_email</source>
+                <target>User with entered email not found</target>
+            </trans-unit>
+
+            <trans-unit id="error_action_db">
+                <source>error_action_db</source>
+                <target>An error has occurred while %process%</target>
+            </trans-unit>
+
+        </body>
+    </file>
+</xliff>

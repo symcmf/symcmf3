@@ -8,13 +8,13 @@ Symfony3 CMF
     with SSH
 
     ```
-        git clone git@github.com:symcmf/symfony3-cmf
+        git clone git@github.com:symcmf/symcmf3
     ```
     
     or with HTTPS
     
     ```
-        git clone https://github.com/symcmf/symfony3-cmf
+        git clone https://github.com/symcmf/symcmf3
     ```
 	
 2. Run composer
