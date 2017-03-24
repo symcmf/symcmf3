@@ -1,15 +1,32 @@
 <?php
 
-namespace AppBundle\Entity\Traits;
+namespace AuthBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Class TimestampableTrait
- * @package AppBundle\Entity\Traits
+ * UserToken
+ *
+ * @ORM\Table(name="user_token")
+ * @ORM\Entity(repositoryClass="AuthBundle\Repository\UserTokenRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
-trait TimestampableTrait
+class UserToken
 {
+    /**
+     * @ORM\Id
+     * @ORM\OneToOne(targetEntity="User")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     */
+    protected $userId;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string")
+     */
+    protected $token;
+
     /**
      * @ORM\Column(name="created_at", type="datetime")
      */
@@ -18,6 +35,38 @@ trait TimestampableTrait
      * @ORM\Column(name="updated_at", type="datetime")
      */
     private $updated;
+
+    /**
+     * @param mixed $userId
+     */
+    public function setUserId($userId)
+    {
+        $this->userId = $userId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserId()
+    {
+        return $this->userId;
+    }
+
+    /**
+     * @param mixed $token
+     */
+    public function setToken($token)
+    {
+        $this->token = $token;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getToken()
+    {
+        return $this->token;
+    }
 
     /**
      * Get created

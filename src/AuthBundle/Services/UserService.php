@@ -1,8 +1,9 @@
 <?php
 
-namespace AppBundle\Services;
+namespace AuthBundle\Services;
 
-use AppBundle\Entity\User;
+use AppBundle\Services\AbstractService;
+use AuthBundle\Entity\User;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
@@ -124,9 +125,9 @@ class UserService extends AbstractService
     {
         if ($email) {
 
-            $user = $this->findUserByEmail($email);
+            $result = $this->findUserByEmail($email);
 
-            if ($user) { return $user; }
+            if ($result) { return $result; }
 
             $user->setEmail($email);
         }

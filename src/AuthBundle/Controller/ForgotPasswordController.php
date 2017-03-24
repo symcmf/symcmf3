@@ -2,51 +2,102 @@
 
 namespace AuthBundle\Controller;
 
-use AuthBundle\Form\UserResetPasswordType;
+use AuthBundle\Form\ResetPasswordForm;
+use AuthBundle\Services\TokenServices\ResetPasswordService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
 class ForgotPasswordController extends Controller
 {
-    public function enterEmailAction()
+    /**
+     * @return ResetPasswordService
+     */
+    private function getResetPasswordService()
     {
-        // TODO check auth or not
-        return $this->render(
-            'auth/forgotPassword.html.twig');
+        return $this->get('auth.service.reset_password');
     }
 
+    /**
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function enterEmailAction()
+    {
+        if ($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
+            return $this->redirect('/');
+        }
+        return $this->render('auth/forgot_password.html.twig');
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
     public function sendPasswordResetEmailAction(Request $request)
     {
-        // TODO add validation
+        if ($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
+            return $this->redirect('/');
+        }
+
         $email = $request->get('_email');
+        $service = $this->getResetPasswordService();
 
-        $service = $this->get('auth.service.reset_password')->sendResetMessage($email, $request->getSchemeAndHttpHost());
+        if (!$service->sendResetMessage($email, $request->getSchemeAndHttpHost())) {
+            return $this->redirectToRoute('forgot_password');
+        }
 
-        // TODO add message about correct sending message
+        $request
+            ->getSession()
+            ->getFlashBag()
+            ->add('success', $this->get('translator')->trans('check_email', [
+                '%email%' => $email
+            ]));
+
         return $this->redirect('/');
     }
 
+    /**
+     * @param $token
+     * @param Request $request
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     */
     public function resetPasswordAction($token, Request $request)
     {
-        $user = $this->get('auth.service.reset_password')->getUserByToken($token);
+        if (!$token) {
+            return $this->redirect('/');
+        }
+
+        $service = $this->getResetPasswordService();
+        $user = $service->getUserByToken($token);
 
         if ($user) {
 
-            $form = $this->createForm(UserResetPasswordType::class, $user);
+            $form = $this->createForm(ResetPasswordForm::class, $user);
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
 
-                $this->get('auth.service.reset_password')->changePassword($user);
+                $service->changePassword($user, $request->get('token'));
+
+                $request
+                    ->getSession()
+                    ->getFlashBag()
+                    ->add('success', $this->get('translator')->trans('success_reset'));
+
                 return $this->redirect('/');
             }
 
-            return $this->render('auth/resetPassword.html.twig', [
+            return $this->render('auth/reset_password.html.twig', [
                 'form' => $form->createView(),
             ]);
         }
 
-        // TODO add error message about incorrect token
+        $request
+            ->getSession()
+            ->getFlashBag()
+            ->add('error', $this->get('translator')->trans('invalid_token'));
+
         return $this->redirect('/');
     }
 }

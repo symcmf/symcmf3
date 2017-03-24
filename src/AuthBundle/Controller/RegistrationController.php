@@ -1,7 +1,7 @@
 <?php
 namespace AuthBundle\Controller;
 
-use AppBundle\Entity\User;
+use AuthBundle\Entity\User;
 use AuthBundle\Form\UserType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,7 +24,7 @@ class RegistrationController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
 
             $user = $this->get('app.service.user')->addUser($user);
-            $this->get('auth.service.activation')->sendConfirmationMessage($user, $request->getSchemeAndHttpHost());
+            $this->get('auth.service.confirmation')->sendMessage($user, $request->getSchemeAndHttpHost());
 
             return $this->redirectToRoute('login');
         }

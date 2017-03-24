@@ -5,6 +5,7 @@ forgot_password:
 send_password_email:
     path:     /forgot/password/check
     defaults:  { _controller: AuthBundle:ForgotPassword:sendPasswordResetEmail }
+    methods:  [POST]
 
 reset_password:
     path:     /reset/password/{token}

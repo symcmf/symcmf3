@@ -4,7 +4,6 @@ namespace AuthBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 class SecurityController extends Controller
 {
@@ -26,9 +25,14 @@ class SecurityController extends Controller
         );
     }
 
+    /**
+     * @param $token
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
     public function confirmationAction($token)
     {
-        if ($user = $this->get('auth.service.activation')->activateUser($token)) {
+        if ($user = $this->get('auth.service.confirmation')->activateUser($token)) {
             $this->get('app.service.user')->setAuth($user);
         }
 

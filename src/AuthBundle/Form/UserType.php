@@ -2,7 +2,7 @@
 
 namespace AuthBundle\Form;
 
-use AppBundle\Entity\User;
+use AuthBundle\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;

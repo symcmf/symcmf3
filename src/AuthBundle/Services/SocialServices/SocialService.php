@@ -1,10 +1,10 @@
 <?php
 
-namespace AuthBundle\Services;
+namespace AuthBundle\Services\SocialServices;
 
-use AppBundle\Entity\User;
+use AuthBundle\Entity\User;
 use AppBundle\Services\AbstractService;
-use AppBundle\Services\UserService;
+use AuthBundle\Services\UserService;
 use Doctrine\ORM\EntityManager;
 
 abstract class SocialService extends AbstractService
@@ -40,11 +40,10 @@ abstract class SocialService extends AbstractService
      */
     public function auth($socialUser)
     {
-
         $user = $this->findBySocialId($socialUser->getId());
 
         if ($user) {
-            return $this->setAuth($user);
+            return $this->userService->setAuth($user);
         }
 
         $name = $socialUser->getFirstName() . ' ' . $socialUser->getLastName();
@@ -55,11 +54,11 @@ abstract class SocialService extends AbstractService
 
         $user = $this->userService->addUser($user, $socialUser->getId(), $name, $socialUser->getEmail());
 
-        if ($user) {
-            return $this->userService->setAuth($user);
+        if (!$user) {
+            return false;
         }
 
-        return false;
+        return $this->userService->setAuth($user);
     }
 
     /**

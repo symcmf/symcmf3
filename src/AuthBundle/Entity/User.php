@@ -1,8 +1,7 @@
 <?php
 
-namespace AppBundle\Entity;
+namespace AuthBundle\Entity;
 
-use AppBundle\Entity\Traits\TimestampableTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -12,7 +11,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * User
  *
  * @ORM\Table(name="user")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
+ * @ORM\Entity(repositoryClass="AuthBundle\Repository\UserRepository")
  * @UniqueEntity(fields="email", message="This email address is already in use")
  * @UniqueEntity(fields="facebookId", message="This facebook id is already in use")
  * @UniqueEntity(fields="googleId", message="This google id is already in use")
@@ -21,9 +20,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class User implements UserInterface
 {
-    use TimestampableTrait;
-
-    /**
+     /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer")
@@ -82,6 +79,15 @@ class User implements UserInterface
      * @ORM\Column(type="boolean")
      */
     protected $activated = false;
+
+    /**
+     * @ORM\Column(name="created_at", type="datetime")
+     */
+    private $created;
+    /**
+     * @ORM\Column(name="updated_at", type="datetime")
+     */
+    private $updated;
 
     /**
      * @param $activated
@@ -290,5 +296,68 @@ class User implements UserInterface
     public function getSalt()
     {
         return null;
+    }
+
+    /**
+     * Get created
+     *
+     * @return \DateTime
+     */
+    public function getCreated()
+    {
+        return $this->created;
+    }
+
+    /**
+     * Set created
+     *
+     * @param \DateTime $created
+     * @return $this
+     */
+    public function setCreated($created)
+    {
+        $this->created = $created;
+
+        return $this;
+    }
+
+    /**
+     * Get updated
+     *
+     * @return \DateTime
+     */
+    public function getUpdated()
+    {
+        return $this->updated;
+    }
+
+    /**
+     * Set updated
+     *
+     * @param \DateTime $updated
+     * @return $this
+     */
+    public function setUpdated($updated)
+    {
+        $this->updated = $updated;
+
+        return $this;
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function prePersist()
+    {
+        $this->created = new \DateTime();
+        $this->updated = new \DateTime();
+    }
+
+    /**
+     * @ORM\PreUpdate()
+     */
+    public function preUpdate()
+    {
+        $this->updated = new \DateTime();
     }
 }

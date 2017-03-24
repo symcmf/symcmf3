@@ -2,7 +2,7 @@
 
 namespace AuthBundle\Services\TokenServices;
 
-use AppBundle\Entity\User;
+use AuthBundle\Entity\User;
 
 interface TokenMessageInterface
 {

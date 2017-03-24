@@ -3,12 +3,12 @@
 security:
 
     encoders:
-        AppBundle\Entity\User: bcrypt
+        AuthBundle\Entity\User: bcrypt
 
     # http://symfony.com/doc/current/security.html#b-configuring-how-users-are-loaded
     providers:
         database_users:
-            entity: { class: AppBundle:User, property: email }
+            entity: { class: AuthBundle:User, property: email }
         in_memory:
             memory: ~
 
@@ -28,7 +28,6 @@ security:
                 target: /
 
     access_control:
-          # URL of FOSUserBundle which need to be available to anonymous users
           - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
           - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
 

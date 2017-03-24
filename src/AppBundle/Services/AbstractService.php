@@ -28,6 +28,18 @@ abstract class AbstractService
     }
 
     /**
+     * @param $type
+     * @param $message
+     */
+    protected function setFlashMessage($type, $message)
+    {
+        $this->container
+            ->get('session')
+            ->getFlashBag()
+            ->add($type, $message);
+    }
+
+    /**
      * @param $object
      *
      * @return null
@@ -45,8 +57,7 @@ abstract class AbstractService
             return $object;
 
         } catch (\Exception $exception) {
-
-            throw new \Exception($exception->getMessage());
+            $this->setFlashMessage('error', $exception->getMessage());
         }
     }
 
@@ -67,8 +78,7 @@ abstract class AbstractService
             return $object;
 
         } catch (\Exception $exception) {
-
-            throw new \Exception($exception->getMessage());
+            $this->setFlashMessage('error', $exception->getMessage());
         }
     }
 
@@ -85,7 +95,7 @@ abstract class AbstractService
             $this->entityManager->flush();
 
         } catch (\Exception $exception) {
-            throw new \Exception($exception->getMessage());
+            $this->setFlashMessage('error', $exception->getMessage());
         }
     }
 }

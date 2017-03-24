@@ -2,10 +2,10 @@
 
 namespace AuthBundle\Services\TokenServices;
 
-use AppBundle\Entity\User;
-use AppBundle\Entity\UserActivations;
+use AuthBundle\Entity\User;
 use AppBundle\Services\AbstractService;
-use AppBundle\Services\UserService;
+use AuthBundle\Services\UserService;
+use AuthBundle\Entity\UserToken;
 use Doctrine\ORM\EntityManager;
 use MessageBundle\Services\Mailers\MailerService;
 
@@ -65,7 +65,7 @@ class TokenService extends AbstractService
     protected function findUserTokenById($id)
     {
         return $this->entityManager
-            ->getRepository(UserActivations::class)
+            ->getRepository(UserToken::class)
             ->findOneBy(['userId' => $id]);
     }
 
@@ -77,7 +77,7 @@ class TokenService extends AbstractService
     protected function findUserTokenByToken($token)
     {
         return $this->entityManager
-            ->getRepository(UserActivations::class)
+            ->getRepository(UserToken::class)
             ->findOneBy(['token' => $token]);
     }
 
@@ -86,12 +86,14 @@ class TokenService extends AbstractService
      *
      * @return string
      */
-    public function createConfirmation(User $user)
+    public function createUserToken(User $user)
     {
         $userToken = $this->findUserTokenById($user->getId());
+
         if (!$userToken) {
             return $this->createToken($user);
         }
+
         return $this->regenerateToken($user);
     }
 
@@ -104,7 +106,7 @@ class TokenService extends AbstractService
     {
         $token = $this->getToken();
 
-        $userToken = $this->findUserTokenById($user->id);
+        $userToken = $this->findUserTokenById($user->getId());
 
         if ($userToken) {
 
@@ -129,8 +131,7 @@ class TokenService extends AbstractService
     {
         $token = $this->getToken();
 
-        // TODO change to UserToken
-        $userToken = new UserActivations();
+        $userToken = new UserToken();
         $userToken->setUserId($user);
         $userToken->setToken($token);
 
@@ -152,7 +153,6 @@ class TokenService extends AbstractService
             return null;
         }
 
-        // TODO maybe need to delete it from here
         $user = $this->userService->activatedUserById($userToken->getUserId());
         $this->removeObject($userToken);
 

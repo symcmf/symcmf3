@@ -1,8 +1,8 @@
 <?php
 
-namespace AuthBundle\Services;
+namespace AuthBundle\Services\SocialServices;
 
-use AppBundle\Entity\User;
+use AuthBundle\Entity\User;
 
 class FacebookService extends SocialService
 {

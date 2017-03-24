@@ -2,7 +2,7 @@
 
 namespace AuthBundle\Controller;
 
-use AuthBundle\Services\SocialService;
+use AuthBundle\Services\SocialServices\SocialService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -39,10 +39,7 @@ abstract class AbstractSocialController extends Controller
             ->getClient($this->clientType);
 
         $socialUser = $client->fetchUser();
-
-        if (!$this->socialService->auth($socialUser)) {
-//            TODO flash message with error if not log
-        }
+        $this->socialService->auth($socialUser);
 
         return $this->redirect('/');
     }
