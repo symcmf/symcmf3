@@ -9,13 +9,15 @@ services:
         class: AuthBundle\Security\FormLoginAuthenticator
         arguments: ["@router", "@security.password_encoder"]
 
+    #base : '@doctrine.orm.default_entity_manager', '@session', '@router', '@translator'
+
     app.service.user:
         class: AuthBundle\Services\UserService
-        arguments: ['@doctrine.orm.default_entity_manager', '@service_container', '@security.password_encoder']
+        arguments: ['@doctrine.orm.default_entity_manager', '@session', '@router', '@translator', '@security.password_encoder', '@security.token_storage']
 
     auth.service.social.facebook:
         class: AuthBundle\Services\SocialServices\FacebookService
-        arguments: ['@doctrine.orm.default_entity_manager', '@service_container', '@app.service.user', '@session']
+        arguments: ['@doctrine.orm.default_entity_manager', '@session', '@router', '@translator', '@app.service.user']
 
     msg.service.mailer:
         class: MessageBundle\Services\Mailers\MailerService
@@ -23,8 +25,8 @@ services:
 
     auth.service.confirmation:
         class: AuthBundle\Services\TokenServices\ConfirmationService
-        arguments: ['@doctrine.orm.default_entity_manager', '@service_container', '@app.service.user', '@msg.service.mailer', '%title%']
+        arguments: ['@doctrine.orm.default_entity_manager', '@session', '@router', '@translator', '@app.service.user', '@msg.service.mailer', '%title%']
 
     auth.service.reset_password:
         class: AuthBundle\Services\TokenServices\ResetPasswordService
-        arguments: ['@doctrine.orm.default_entity_manager', '@service_container', '@app.service.user', '@msg.service.mailer', '%title%']
+        arguments: ['@doctrine.orm.default_entity_manager', '@session', '@router', '@translator', '@app.service.user', '@msg.service.mailer', '%title%']

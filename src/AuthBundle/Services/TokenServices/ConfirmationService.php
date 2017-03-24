@@ -10,6 +10,7 @@ use AuthBundle\Entity\User;
  */
 class ConfirmationService extends TokenService  implements TokenMessageInterface
 {
+
     const CONFIRMATION_SUBJECT = 'Confirmation message';
 
     /**
@@ -21,7 +22,7 @@ class ConfirmationService extends TokenService  implements TokenMessageInterface
      */
     public function getBody(User $user, $token, $host)
     {
-        $confirmationLink = $host . $this->container->get('router')->generate('confirmation', [
+        $confirmationLink = $host . $this->router->generate('confirmation', [
                 'token' => $token
             ]);
 

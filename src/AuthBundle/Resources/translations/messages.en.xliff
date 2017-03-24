@@ -23,6 +23,11 @@
                 <target>User with entered email not found</target>
             </trans-unit>
 
+            <trans-unit id="error_action_db">
+                <source>error_action_db</source>
+                <target>An error has occurred while %process%</target>
+            </trans-unit>
+
         </body>
     </file>
 </xliff>

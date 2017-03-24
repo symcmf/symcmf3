@@ -5,7 +5,12 @@ namespace AuthBundle\Services;
 use AppBundle\Services\AbstractService;
 use AuthBundle\Entity\User;
 use Doctrine\ORM\EntityManager;
+use Symfony\Bundle\FrameworkBundle\Routing\Router;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoder;
+use Symfony\Component\Translation\DataCollectorTranslator;
 
 /**
  * Class UserService
@@ -14,21 +19,37 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 class UserService extends AbstractService
 {
     /**
-     * @var
+     * @var UserPasswordEncoder
      */
     protected $encoder;
+
+    /**
+     * @var TokenStorage
+     */
+    protected $tokenStorage;
 
     /**
      * UserService constructor.
      *
      * @param EntityManager $entityManager
-     * @param $passwordEncoder
-     * @param $container
+     * @param Session $session
+     * @param Router $router
+     * @param DataCollectorTranslator $translator
+     * @param UserPasswordEncoder $passwordEncoder
+     * @param TokenStorage $tokenStorage
      */
-    public function __construct(EntityManager $entityManager, $container,  $passwordEncoder)
+    public function __construct(
+        EntityManager $entityManager,
+        Session $session,
+        Router $router,
+        DataCollectorTranslator $translator,
+        UserPasswordEncoder $passwordEncoder,
+        TokenStorage $tokenStorage
+    )
     {
-        parent::__construct($entityManager, $container);
+        parent::__construct($entityManager, $session, $router, $translator);
         $this->encoder = $passwordEncoder;
+        $this->tokenStorage = $tokenStorage;
     }
 
     /**
@@ -41,8 +62,8 @@ class UserService extends AbstractService
         try {
 
             $token = new UsernamePasswordToken($user, null, 'secured_area', $user->getRoles());
-            $this->container->get('security.token_storage')->setToken($token);
-            $this->container->get('session')->set('_security_secured_area', serialize($token));
+            $this->tokenStorage->setToken($token);
+            $this->session->set('_security_secured_area', serialize($token));
 
             return true;
 

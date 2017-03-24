@@ -21,7 +21,7 @@ class ResetPasswordService extends TokenService implements TokenMessageInterface
      */
     public function getBody(User $user, $token, $host)
     {
-        $resetLink = $host . $this->container->get('router')->generate('reset_password', [
+        $resetLink = $host . $this->router->generate('reset_password', [
                 'token' => $token
             ]);
 
@@ -106,7 +106,7 @@ class ResetPasswordService extends TokenService implements TokenMessageInterface
     {
         $user = $this->userService->findUserByEmail($email);
         if (!$user) {
-            $this->setFlashMessage('error', $this->container->get('translator')->trans('unknown_email'));
+            $this->setFlashMessage('error', $this->translator->trans('unknown_email'));
             return false;
         }
 

@@ -6,6 +6,9 @@ use AuthBundle\Entity\User;
 use AppBundle\Services\AbstractService;
 use AuthBundle\Services\UserService;
 use Doctrine\ORM\EntityManager;
+use Symfony\Bundle\FrameworkBundle\Routing\Router;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Translation\DataCollectorTranslator;
 
 /**
  * Class SocialService
@@ -19,22 +22,21 @@ abstract class SocialService extends AbstractService
     protected $userService;
 
     /**
-     * @var
-     */
-    protected $session;
-
-    /**
      * SocialService constructor.
      * @param EntityManager $entityManager
-     * @param UserService $userService
      * @param $session
-     * @param $container
+     * @param UserService $userService
      */
-    public function __construct(EntityManager $entityManager, $container, UserService $userService, $session)
+    public function __construct(
+        EntityManager $entityManager,
+        Session $session,
+        Router $router,
+        DataCollectorTranslator $translator,
+        UserService $userService
+    )
     {
-        parent::__construct($entityManager, $container);
+        parent::__construct($entityManager, $session, $router, $translator);
         $this->userService = $userService;
-        $this->session = $session;
     }
 
     /**

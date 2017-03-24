@@ -8,6 +8,9 @@ use AuthBundle\Services\UserService;
 use AuthBundle\Entity\UserToken;
 use Doctrine\ORM\EntityManager;
 use MessageBundle\Services\Mailers\MailerService;
+use Symfony\Bundle\FrameworkBundle\Routing\Router;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Translation\DataCollectorTranslator;
 
 /**
  * Class TokenService
@@ -25,6 +28,8 @@ class TokenService extends AbstractService
      */
     protected $mailer;
 
+
+
     /**
      * @var string
      */
@@ -34,20 +39,23 @@ class TokenService extends AbstractService
      * TokenService constructor.
      *
      * @param EntityManager $entityManager
-     * @param $container
+     * @param Session $session
      * @param UserService $userService
      * @param MailerService $mailer
+     * @param Router $router
      * @param $keyForToken
      */
     public function __construct(
         EntityManager $entityManager,
-        $container,
+        Session $session,
+        Router $router,
+        DataCollectorTranslator $translator,
         UserService $userService,
         MailerService $mailer,
         $keyForToken
     )
     {
-        parent::__construct($entityManager, $container);
+        parent::__construct($entityManager, $session, $router, $translator);
         $this->userService = $userService;
         $this->mailer = $mailer;
         $this->keyForToken = $keyForToken;

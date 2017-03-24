@@ -3,6 +3,9 @@
 namespace AppBundle\Services;
 
 use Doctrine\ORM\EntityManager;
+use Symfony\Bundle\FrameworkBundle\Routing\Router;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Translation\DataCollectorTranslator;
 
 abstract class AbstractService
 {
@@ -12,19 +15,39 @@ abstract class AbstractService
     protected $entityManager;
 
     /**
-     * @var
+     * @var Session
      */
-    protected $container;
+    protected $session;
+
+    /**
+     * @var DataCollectorTranslator
+     */
+    protected $translator;
+
+    /**
+     * @var Router
+     */
+    protected $router;
 
     /**
      * AbstractService constructor.
+     *
      * @param EntityManager $entityManager
-     * @param $container
+     * @param Session $session
+     * @param Router $router
+     * @param DataCollectorTranslator $translator
      */
-    public function __construct(EntityManager $entityManager, $container)
+    public function __construct(
+        EntityManager $entityManager,
+        Session $session,
+        Router $router,
+        DataCollectorTranslator $translator
+    )
     {
         $this->entityManager = $entityManager;
-        $this->container = $container;
+        $this->session = $session;
+        $this->translator = $translator;
+        $this->router = $router;
     }
 
     /**
@@ -33,10 +56,7 @@ abstract class AbstractService
      */
     protected function setFlashMessage($type, $message)
     {
-        $this->container
-            ->get('session')
-            ->getFlashBag()
-            ->add($type, $message);
+        $this->session->getFlashBag()->add($type, $message);
     }
 
     /**
@@ -57,7 +77,9 @@ abstract class AbstractService
             return $object;
 
         } catch (\Exception $exception) {
-            $this->setFlashMessage('error', $exception->getMessage());
+            $this->setFlashMessage('error', $this->translator->trans('error_action_db', [
+                '%process%' => 'saving',
+            ]));
         }
     }
 
@@ -78,7 +100,9 @@ abstract class AbstractService
             return $object;
 
         } catch (\Exception $exception) {
-            $this->setFlashMessage('error', $exception->getMessage());
+            $this->setFlashMessage('error', $this->translator->trans('error_action_db', [
+                '%process%' => 'updating',
+            ]));
         }
     }
 
@@ -95,7 +119,9 @@ abstract class AbstractService
             $this->entityManager->flush();
 
         } catch (\Exception $exception) {
-            $this->setFlashMessage('error', $exception->getMessage());
+            $this->setFlashMessage('error', $this->translator->trans('error_action_db', [
+                '%process%' => 'removing',
+            ]));
         }
     }
 }
