@@ -24,6 +24,10 @@ class AppKernel extends Kernel
             // Social Auth
             new KnpU\OAuth2ClientBundle\KnpUOAuth2ClientBundle(),
 
+            new MessageBundle\MessageBundle(),
+
+            new Ivory\CKEditorBundle\IvoryCKEditorBundle(),
+
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {

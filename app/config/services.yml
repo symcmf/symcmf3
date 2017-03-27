@@ -23,6 +23,10 @@ services:
         class: MessageBundle\Services\Mailers\MailerService
         arguments: ['@mailer', '%admin_address%']
 
+    msg.service.message_service:
+        class: MessageBundle\Services\MessageService
+        arguments: ['@msg.service.mailer']
+
     auth.service.confirmation:
         class: AuthBundle\Services\TokenServices\ConfirmationService
         arguments: ['@doctrine.orm.default_entity_manager', '@session', '@router', '@translator', '@app.service.user', '@msg.service.mailer', '%title%']

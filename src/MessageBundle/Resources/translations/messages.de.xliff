@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+    <file source-language="de" target-language="de" datatype="plaintext" original="file.ext">
+        <body>
+
+             <trans-unit id="breadcrumb.link_message_user_list">
+                <source>breadcrumb.link_message_user_list</source>
+                <target>Nachrichtenliste senden</target>
+            </trans-unit>
+
+            <trans-unit id="breadcrumb.link_message_template_list">
+                <source>breadcrumb.link_message_template_list</source>
+                <target>Liste der Nachrichtenvorlagen</target>
+            </trans-unit>
+
+            <trans-unit id="template.name">
+                <source>template.name</source>
+                <target>Nachrichtenvorlagen</target>
+            </trans-unit>
+            <trans-unit id="form.label_subject ">
+                <source>form.label_subject </source>
+                <target>Fach</target>
+            </trans-unit>
+            <trans-unit id="form.label_template">
+                <source>form.label_template</source>
+                <target>Vorlage</target>
+            </trans-unit>
+            <trans-unit id="form.template.label_helper">
+                <source>form.template.label_helper</source>
+                <target>Bedienfeld</target>
+            </trans-unit>
+            <trans-unit id="form.template.helper_message">
+                <source>form.template.helper_message</source>
+                <target>Sie können die folgenden speziellen Wörter in Ihnen Schablone mögen: </target>
+            </trans-unit>
+            <trans-unit id="form.template.group_template">
+                <source>form.template.group_template</source>
+                <target>Schablonenbedienfeld</target>
+            </trans-unit>
+
+
+
+            <trans-unit id="sending.name">
+                <source>sending.name</source>
+                <target>Senden von Nachrichten</target>
+            </trans-unit>
+            <trans-unit id="form.sending.send_panel">
+                <source>form.sending.send_panel</source>
+                <target>Nachricht senden</target>
+            </trans-unit>
+            <trans-unit id="form.label_message">
+                <source>form.label_message</source>
+                <target>Vorlage</target>
+            </trans-unit>
+            <trans-unit id="form.sending.to_user_panel">
+                <source>form.sending.to_user_panel</source>
+                <target>Für Benutzer</target>
+            </trans-unit>
+            <trans-unit id="form.label_user">
+                <source>form.label_user</source>
+                <target>Benutzer</target>
+            </trans-unit>
+            <trans-unit id="form.sending.to_group_panel">
+                <source>form.sending.to_group_panel</source>
+                <target>Für Benutzer aus Gruppen</target>
+            </trans-unit>
+            <trans-unit id="form.label_groups">
+                <source>form.label_groups</source>
+                <target>Gruppen</target>
+            </trans-unit>
+
+
+
+            <trans-unit id="list.label_id">
+                <source>list.label_id</source>
+                <target>ID</target>
+            </trans-unit>
+            <trans-unit id="list.label_subject">
+                <source>list.label_subject</source>
+                <target>Fach</target>
+            </trans-unit>
+            <trans-unit id="list.label_template">
+                <source>list.label_template</source>
+                <target>Vorlage</target>
+            </trans-unit>
+            <trans-unit id="list.label__action">
+                <source>list.label__action</source>
+                <target>Aktion</target>
+            </trans-unit>
+
+
+            <trans-unit id="list.label_message">
+                <source>list.label_message</source>
+                <target>Vorlage</target>
+            </trans-unit>
+            <trans-unit id="list.label_user">
+                <source>list.label_user</source>
+                <target>Benutzer</target>
+            </trans-unit>
+            <trans-unit id="list.label_created">
+                <source>list.label_created</source>
+                <target>Hergestellt in</target>
+            </trans-unit>
+
+            <trans-unit id="message_template">
+                <source>message_template</source>
+                <target>Nachrichtenvorlagen</target>
+            </trans-unit>
+
+            <trans-unit id="sending_message">
+                <source>sending_message</source>
+                <target>Senden von Nachrichten</target>
+            </trans-unit>
+
+
+        </body>
+    </file>
+</xliff>

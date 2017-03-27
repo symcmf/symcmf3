@@ -26,7 +26,8 @@ class User implements UserInterface
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @ORM\OneToOne(targetEntity="UserActivations", mappedBy="userId")
+     * @ORM\OneToOne(targetEntity="UserToken", mappedBy="userId")
+     * @ORM\OneToMany(targetEntity="MessageUser", mappedBy="user")
      */
     private $id;
 
@@ -359,5 +360,10 @@ class User implements UserInterface
     public function preUpdate()
     {
         $this->updated = new \DateTime();
+    }
+
+    public function __toString()
+    {
+        return $this->getUsername();
     }
 }
