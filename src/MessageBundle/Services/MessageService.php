@@ -49,8 +49,6 @@ class MessageService
         return [
             'username',
             'email',
-            'firstname',
-            'lastname',
         ];
     }
 

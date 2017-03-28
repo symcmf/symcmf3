@@ -24,13 +24,12 @@ easy_admin:
                     - twitterId
         Templates:
             class: MessageBundle\Entity\MessageTemplate
+            controller: MessageBundle\Controller\MessageTemplateAdminController
             new:
-                help: 'The list view overrides the global help message'
                 fields:
                     - subject
                     - { property: 'template', type: 'ckeditor' }
             edit:
-                help: 'The list view overrides the global help message'
                 fields:
                     - subject
                     - { property: 'template', type: 'ckeditor' }
@@ -39,10 +38,8 @@ easy_admin:
             class: MessageBundle\Entity\MessageUser
             controller: MessageBundle\Controller\MessageUserAdminController
             list:
-                help: 'The list33333 view overrides the global help message'
-                actions: ['new', 'delete', 'search']
+                actions: ['-edit']
             new:
-                help: 'The list view overrides the global help message'
                 fields:
                     - message
                     - property: 'users'

@@ -17,18 +17,21 @@
 {% endblock %}
 
 {% block content_help %}
-    <div class="box box-widget help-entity">
-        <div class="box-body">
-            {{ help }}
+    {% if help is defined %}
+        <div class="box box-widget help-entity">
+            <div class="box-body">
+                {{ help }}
+            </div>
         </div>
-    </div>
+    {% endif %}
 {% endblock content_help %}
 
 {% block main %}
-
-    {% block entity_form %}
-        {{ form(form) }}
-    {% endblock entity_form %}
+    {% spaceless %}
+        {% block entity_form %}
+            {{ form(form) }}
+        {% endblock entity_form %}
+    {% endspaceless %}
 {% endblock %}
 
 {% block body_javascript %}

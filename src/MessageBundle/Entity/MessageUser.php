@@ -3,9 +3,7 @@
 namespace MessageBundle\Entity;
 
 use AuthBundle\Entity\User;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\Tools\Pagination\Paginator;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -102,6 +100,8 @@ class MessageUser
 
     /**
      * @var array
+     *
+     * @Assert\NotBlank(message = "Array of users can't be empty")
      */
     protected $users;
 
