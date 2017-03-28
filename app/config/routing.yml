@@ -12,6 +12,6 @@ reset:
     resource: "@AuthBundle/Resources/config/routing/reset.yml"
 
 easy_admin_bundle:
-    resource: "@EasyAdminBundle/Controller/"
+    resource: "@AppBundle/Controller/AdminController.php"
     type:     annotation
     prefix:   /admin

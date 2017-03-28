@@ -3,10 +3,21 @@
 namespace AuthBundle\Controller;
 
 use AuthBundle\Entity\User;
-use JavierEguiluz\Bundle\EasyAdminBundle\Controller\AdminController as BaseAdminController;
+use AppBundle\Controller\AdminController as BaseAdminController;
 
 class UserAdminController extends BaseAdminController
 {
+    /**
+     * @param $entity
+     *
+     * @return User $entity
+     */
+    protected function preUpdateChangeEntity(User $entity)
+    {
+        return $entity->setUserPanel();
+
+    }
+
     /**
      * @param User $entity
      */

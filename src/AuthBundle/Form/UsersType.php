@@ -21,5 +21,13 @@ class UsersType extends AbstractType
                 'choice_label' => 'email',
             ])
         ;
+
+//        $builder
+//            ->add('users', EntityType::class, [
+//                'class' => 'AuthBundle:Role',
+//                'choice_label' => 'name',
+//                'multiple' => true,
+//            ])
+//        ;
     }
 }
