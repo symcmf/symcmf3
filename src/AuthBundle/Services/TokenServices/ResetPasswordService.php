@@ -25,7 +25,7 @@ class ResetPasswordService extends TokenService implements TokenMessageInterface
                 'token' => $token
             ]);
 
-        $body = 'Hi, ' . $user->getName() . '! ' .
+        $body = 'Hi, ' . $user->getUsername() . '! ' .
             'It\'s reset password message. You need to click on the link below to reset you password. ' .
             'Link : ' . $resetLink . ' ' .
             'Thanks. Regards, symcmf3';

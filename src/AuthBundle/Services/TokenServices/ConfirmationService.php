@@ -26,7 +26,7 @@ class ConfirmationService extends TokenService  implements TokenMessageInterface
                 'token' => $token
             ]);
 
-        $body = 'Hi, ' . $user->getName() . '! ' .
+        $body = 'Hi, ' . $user->getUsername() . '! ' .
             'It\'s confirmation message. You need to click on the link below to activate you account. ' .
             'Confirmation link : ' . $confirmationLink . ' ' .
             'Thanks. Regards, symcmf3';

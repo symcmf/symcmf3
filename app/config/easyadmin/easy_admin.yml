@@ -6,7 +6,7 @@ easy_admin:
             edit:
                 fields:
                     - email
-                    - name
+                    - username
                     - roles
                     - activated
                     - facebookId
@@ -15,7 +15,7 @@ easy_admin:
             new:
                 fields:
                     - email
-                    - name
+                    - username
                     - password
                     - roles
                     - activated

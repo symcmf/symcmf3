@@ -142,12 +142,12 @@ class UserService extends AbstractService
     /**
      * @param User $user
      * @param null $socialId
-     * @param null $name
+     * @param null $username
      * @param null $email
      *
      * @return null
      */
-    public function addUser(User $user, $socialId = null, $name = null, $email = null)
+    public function addUser(User $user, $socialId = null, $username = null, $email = null)
     {
         if ($email) {
 
@@ -158,7 +158,7 @@ class UserService extends AbstractService
             $user->setEmail($email);
         }
 
-        if ($name) { $user->setName($name); }
+        if ($username) { $user->setUsername($username); }
 
         // Encode the new users password
         if ($socialId) {
