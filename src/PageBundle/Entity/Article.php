@@ -7,20 +7,15 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Category
+ * Article
  *
- * @ORM\Table(name="category")
- * @ORM\Entity(repositoryClass="PageBundle\Repository\CategoryRepository")
- * @UniqueEntity(fields="name", message="This name of category is already in use")
+ * @ORM\Table(name="article")
+ * @ORM\Entity(repositoryClass="PageBundle\Repository\ArticleRepository")
+ * @UniqueEntity(fields="title", message="This title is already in use")
  * @ORM\HasLifecycleCallbacks()
  */
-class Category
+class Article
 {
-    static public $default = [
-        'name' => 'default',
-        'description' => 'default category'
-    ];
-
     /**
      * @var int
      *
@@ -43,73 +38,76 @@ class Category
     /**
      * @var string
      *
-     * @ORM\Column(type="string", length=40, unique=true)
+     * @ORM\Column(type="string", length=100, unique=true)
      *
      * @Assert\NotBlank
-     * @Assert\NotNull
      */
-    private $name;
-
-    /**
-     * @var static
-     *
-     * @ORM\Column(type="string", length=100, unique=true, nullable=true)
-     */
-    private $description;
-
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(type="boolean")
-     */
-    private $activated = false;
-
-    /**
-     * @param boolean $activated
-     */
-    public function setActivated($activated)
-    {
-        $this->activated = $activated;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function isActivated()
-    {
-        return $this->activated;
-    }
-
-    /**
-     * @param static $description
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-    }
-
-    /**
-     * @return static
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
-
-    /**
-     * @param string $name
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-    }
+    private $title;
 
     /**
      * @return string
      */
-    public function getName()
+    public function getTitle()
     {
-        return $this->name;
+        return $this->title;
+    }
+
+    /**
+     * @param string $title
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+    }
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", length=255)
+     *
+     * @Assert\NotBlank
+     */
+    private $content;
+
+    /**
+     * @return string
+     */
+    public function getContent()
+    {
+        return $this->content;
+    }
+
+    /**
+     * @param string $content
+     */
+    public function setContent($content)
+    {
+        $this->content = $content;
+    }
+
+    /**
+     * @var Category
+     *
+     * Many Articles have One Category.
+     * @ORM\ManyToOne(targetEntity="Category")
+     * @ORM\JoinColumn(name="category_id", referencedColumnName="id", nullable=false)
+     */
+    private $category;
+
+    /**
+     * @return Category
+     */
+    public function getCategory()
+    {
+        return $this->category;
+    }
+
+    /**
+     * @param Category $category
+     */
+    public function setCategory($category)
+    {
+        $this->category = $category;
     }
 
     /**
@@ -183,13 +181,5 @@ class Category
     public function preUpdate()
     {
         $this->updated = new \DateTime();
-    }
-
-    /**
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->name;
     }
 }

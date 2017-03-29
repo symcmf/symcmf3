@@ -22,8 +22,10 @@ class CategoryTestsCest
         $I->wantTo('create new category');
 
         $I->amOnRoute('easyadmin', ['entity' => 'Category', 'action' => 'new']);
+
         $I->fillField('Name', 'testCategory');
         $I->click(['css' => 'button[type="submit"]']);
+
         $I->see('testCategory');
     }
 
@@ -33,8 +35,10 @@ class CategoryTestsCest
         $I->wantTo('create new category without name');
 
         $I->amOnRoute('easyadmin', ['entity' => 'Category', 'action' => 'new']);
+
         $I->fillField('Name', '');
         $I->click(['css' => 'button[type="submit"]']);
+
         $I->see('This value should not be blank');
     }
 
@@ -46,6 +50,7 @@ class CategoryTestsCest
         $I->wantTo('create new category with existed name');
 
         $I->amOnRoute('easyadmin', ['entity' => 'Category', 'action' => 'new']);
+
         $I->fillField('Name', 'testCategory');
         $I->click(['css' => 'button[type="submit"]']);
         $I->see('This name of category is already in use');
