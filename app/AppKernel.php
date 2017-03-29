@@ -27,8 +27,13 @@ class AppKernel extends Kernel
 
             // EasyAdminBundle
             new JavierEguiluz\Bundle\EasyAdminBundle\EasyAdminBundle(),
+
             // Editor
             new Ivory\CKEditorBundle\IvoryCKEditorBundle(),
+
+            // JWT auth
+            new Lexik\Bundle\JWTAuthenticationBundle\LexikJWTAuthenticationBundle(),
+            new Nelmio\ApiDocBundle\NelmioApiDocBundle(),
 
         ];
 

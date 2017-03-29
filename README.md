@@ -53,8 +53,16 @@ Symfony3 CMF
     vagrant up
     ```
     
+6. Generate the SSH keys :
+
+     ```
+       $ mkdir -p var/jwt # For Symfony3+, no need of the -p option
+       $ openssl genrsa -out var/jwt/private.pem -aes256 4096
+       $ openssl rsa -pubout -in var/jwt/private.pem -out var/jwt/public.pem
+     ```
+    
    
-6. After it, browse [http://192.168.10.10](http://192.168.10.10), you should see the main page of application.
+7. After it, browse [http://192.168.10.10](http://192.168.10.10), you should see the main page of application.
    Or add to your hosts file 
     
      ```
