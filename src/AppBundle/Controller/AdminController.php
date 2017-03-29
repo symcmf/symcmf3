@@ -36,13 +36,13 @@ class AdminController extends BaseAdminController
             throw new \RuntimeException(sprintf('The "%s" property of the "%s" entity is not writable.', $property, $entityConfig['name']));
         }
 
-        $this->dispatch(EasyAdminEvents::PRE_UPDATE, array('entity' => $entity, 'newValue' => $value));
+        $this->dispatch(EasyAdminEvents::PRE_UPDATE, ['entity' => $entity, 'newValue' => $value]);
 
         $this->get('property_accessor')->setValue($entity, $property, $value);
         $this->em->persist($entity);
         $this->em->flush();
 
-        $this->dispatch(EasyAdminEvents::POST_UPDATE, array('entity' => $entity, 'newValue' => $value));
+        $this->dispatch(EasyAdminEvents::POST_UPDATE, ['entity' => $entity, 'newValue' => $value]);
         $this->dispatch(EasyAdminEvents::POST_EDIT);
     }
 
@@ -64,11 +64,11 @@ class AdminController extends BaseAdminController
     {
         $methodName = str_replace('<EntityName>', $this->entity['name'], $methodNamePattern);
 
-        if (!is_callable(array($this, $methodName))) {
+        if (!is_callable([$this, $methodName])) {
             $methodName = str_replace('<EntityName>', '', $methodNamePattern);
         }
 
-        return call_user_func_array(array($this, $methodName), $arguments);
+        return call_user_func_array([$this, $methodName], $arguments);
     }
 
     /**
@@ -83,7 +83,7 @@ class AdminController extends BaseAdminController
         $easyadmin = $this->request->attributes->get('easyadmin');
         $entity = $easyadmin['item'];
 
-        $this->executeDynamicMethod('preUpdateChange<EntityName>Entity', array($entity));
+        $this->executeDynamicMethod('preUpdateChange<EntityName>Entity', [$entity]);
         $this->em->flush();
 
         if ($this->request->isXmlHttpRequest() && $property = $this->request->query->get('property')) {
@@ -100,31 +100,31 @@ class AdminController extends BaseAdminController
 
         $fields = $this->entity['edit']['fields'];
 
-        $editForm = $this->executeDynamicMethod('create<EntityName>EditForm', array($entity, $fields));
+        $editForm = $this->executeDynamicMethod('create<EntityName>EditForm', [$entity, $fields]);
         $deleteForm = $this->createDeleteForm($this->entity['name'], $id);
         $editForm->handleRequest($this->request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->dispatch(EasyAdminEvents::PRE_UPDATE, array('entity' => $entity));
+            $this->dispatch(EasyAdminEvents::PRE_UPDATE, ['entity' => $entity]);
 
-            $this->executeDynamicMethod('preUpdate<EntityName>Entity', array($entity));
+            $this->executeDynamicMethod('preUpdate<EntityName>Entity', [$entity]);
             $this->em->flush();
 
-            $this->dispatch(EasyAdminEvents::POST_UPDATE, array('entity' => $entity));
+            $this->dispatch(EasyAdminEvents::POST_UPDATE, ['entity' => $entity]);
             $refererUrl = $this->request->query->get('referer', '');
 
             return !empty($refererUrl)
                 ? $this->redirect(urldecode($refererUrl))
-                : $this->redirect($this->generateUrl('easyadmin', array('action' => 'list', 'entity' => $this->entity['name'])));
+                : $this->redirect($this->generateUrl('easyadmin', ['action' => 'list', 'entity' => $this->entity['name']]));
         }
 
         $this->dispatch(EasyAdminEvents::POST_EDIT);
 
-        return $this->render($this->entity['templates']['edit'], array(
+        return $this->render($this->entity['templates']['edit'], [
             'form' => $editForm->createView(),
             'entity_fields' => $fields,
             'entity' => $entity,
             'delete_form' => $deleteForm->createView(),
-        ));
+        ]);
     }
 }
