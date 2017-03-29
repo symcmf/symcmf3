@@ -10,9 +10,9 @@ class UserAdminController extends BaseAdminController
     /**
      * @param $entity
      *
-     * @return User $entity
+     * @return mixed
      */
-    protected function preUpdateChangeEntity(User $entity)
+    protected function preUpdateChangeEntity($entity)
     {
         return $entity->setUserPanel();
 
