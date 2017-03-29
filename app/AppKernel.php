@@ -21,8 +21,11 @@ class AppKernel extends Kernel
             new JavierEguiluz\Bundle\EasyAdminBundle\EasyAdminBundle(),
 
             new AuthBundle\AuthBundle(),
+
             // Social Auth
             new KnpU\OAuth2ClientBundle\KnpUOAuth2ClientBundle(),
+
+            new Ivory\CKEditorBundle\IvoryCKEditorBundle(),
 
         ];
 

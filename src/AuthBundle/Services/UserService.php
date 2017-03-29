@@ -3,6 +3,7 @@
 namespace AuthBundle\Services;
 
 use AppBundle\Services\AbstractService;
+use AuthBundle\Entity\Role;
 use AuthBundle\Entity\User;
 use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
@@ -168,8 +169,18 @@ class UserService extends AbstractService
 
         $user->setPassword($password);
 
-        // Set role
-        $user->setRole('ROLE_USER');
+        $role = $this->entityManager->getRepository(Role::class)->findOneBy(['name' => 'user']);
+
+        if (!$role) {
+            $role = new Role();
+            $role->setName('user');
+            $role->setRole('ROLE_USER');
+
+            $this->saveObject($role);
+        }
+
+        // set role
+        $user->addRole($role);
 
         return $this->saveObject($user);
     }
