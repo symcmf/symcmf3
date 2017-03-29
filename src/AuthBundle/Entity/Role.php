@@ -15,6 +15,16 @@ use Symfony\Component\Security\Core\Role\RoleInterface;
  */
 class Role implements RoleInterface, \Serializable
 {
+    static public $userRole = [
+        'role' => 'ROLE_USER',
+        'name' => 'user',
+    ];
+
+    static public $adminRole = [
+        'role' => 'ROLE_ADMIN',
+        'name' => 'admin'
+    ];
+
     /**
      * @var int
      *
