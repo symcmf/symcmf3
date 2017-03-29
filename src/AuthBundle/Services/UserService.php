@@ -173,8 +173,8 @@ class UserService extends AbstractService
 
         if (!$role) {
             $role = new Role();
-            $role->setName('user');
-            $role->setRole('ROLE_USER');
+            $role->setName(Role::$userRole['name']);
+            $role->setRole(Role::$userRole['role']);
 
             $this->saveObject($role);
         }
