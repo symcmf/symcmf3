@@ -36,7 +36,6 @@ class User implements UserInterface
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      * @ORM\OneToOne(targetEntity="UserToken", mappedBy="userId")
-     * @ORM\OneToMany(targetEntity="MessageUser", mappedBy="user")
      */
     private $id;
 
@@ -409,6 +408,9 @@ class User implements UserInterface
         $this->updated = new \DateTime();
     }
 
+    /**
+     * @return string
+     */
     public function __toString()
     {
         return $this->getUsername();
