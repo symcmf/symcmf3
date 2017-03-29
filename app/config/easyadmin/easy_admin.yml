@@ -40,9 +40,9 @@ easy_admin:
                 fields:
                     - title
                     - category
-                    - { property: 'content', type: 'ckeditor', required: true }
+                    - { property: 'content', type: 'ckeditor' }
             new:
                 fields:
                     - title
                     - category
-                    - { property: 'content', type: 'ckeditor', required: true }
+                    - { property: 'content', type: 'ckeditor' }

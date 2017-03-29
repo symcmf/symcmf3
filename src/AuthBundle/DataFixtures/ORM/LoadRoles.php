@@ -6,7 +6,8 @@ use AuthBundle\Entity\Role;
 use Doctrine\Common\Persistence\ObjectManager;
 
 /**
- * Load Project role
+ * Class LoadRoles
+ * @package AuthBundle\DataFixtures\ORM
  */
 class LoadRoles extends AbstractLoad
 {

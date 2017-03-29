@@ -8,7 +8,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Class AbstractLoad
- * @package AuthBundle\DataFixtures\ORM
+ * @package AppBundle\DataFixtures\ORM
  */
 abstract class AbstractLoad implements FixtureInterface, ContainerAwareInterface
 {
