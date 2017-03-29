@@ -29,7 +29,9 @@ easy_admin:
                 fields:
                     - name
                     - description
+                    - activated
             new:
                 fields:
                     - name
                     - description
+                    - activated

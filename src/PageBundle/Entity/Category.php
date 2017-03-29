@@ -53,6 +53,29 @@ class Category
     private $description;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(type="boolean")
+     */
+    private $activated = false;
+
+    /**
+     * @param boolean $activated
+     */
+    public function setActivated($activated)
+    {
+        $this->activated = $activated;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isActivated()
+    {
+        return $this->activated;
+    }
+
+    /**
      * @param static $description
      */
     public function setDescription($description)
