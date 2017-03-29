@@ -22,3 +22,14 @@ easy_admin:
                     - facebookId
                     - googleId
                     - twitterId
+
+        Category:
+            class: PageBundle\Entity\Category
+            edit:
+                fields:
+                    - name
+                    - description
+            new:
+                fields:
+                    - name
+                    - description

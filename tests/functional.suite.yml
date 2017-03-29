@@ -1,0 +1,10 @@
+class_name: FunctionalTester
+modules:
+    enabled:
+        - Symfony:
+            var_path: 'var'
+            app_path: 'app'
+        - Doctrine2:
+            depends: Symfony
+            cleanup: true
+        - \Helper\Functional
