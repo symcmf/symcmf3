@@ -2,6 +2,7 @@
 
 namespace AuthBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -20,13 +21,21 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class User implements UserInterface
 {
-     /**
+    /**
+     * User constructor.
+     */
+    public function __construct()
+    {
+        $this->roles = new ArrayCollection();
+    }
+
+    /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @ORM\OneToOne(targetEntity="UserActivations", mappedBy="userId")
+     * @ORM\OneToOne(targetEntity="UserToken", mappedBy="userId")
      */
     private $id;
 
@@ -55,11 +64,14 @@ class User implements UserInterface
     protected $name;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(type="string", length=50)
+     * Many User have Many Roles.
+     * @ORM\ManyToMany(targetEntity="AuthBundle\Entity\Role")
+     * @ORM\JoinTable(name="users_roles",
+     *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="role_id", referencedColumnName="id")}
+     *      )
      */
-    protected $role;
+    protected $roles;
 
     /**
      * @Assert\Length(max=4096)
@@ -195,27 +207,62 @@ class User implements UserInterface
     }
 
     /**
+     * @var bool
+     */
+    private $forUserPanel = false;
+
+    /**
+     * Set flag for user panel
+     */
+    public function setUserPanel()
+    {
+        $this->forUserPanel = true;
+
+        return $this;
+    }
+
+    /**
      * @return string
      */
-    public function getRole()
+    public function getRoles()
     {
-        return $this->role;
+        if ($this->forUserPanel) {
+            return $this->roles->toArray();
+        }
+
+        $roles = [];
+        foreach ($this->roles as $role) {
+            $roles[] = $role->getRole();
+        }
+
+        return $roles;
+    }
+
+    /**
+     * @param $role
+     *
+     * @return $this
+     */
+    public function addRole(Role $role = null)
+    {
+        if (!$this->roles->contains($role)) {
+            $this->roles->add($role);
+        }
+
+        return $this;
     }
 
     /**
      * @param null $role
+     *
+     * @return $this
      */
-    public function setRole($role = null)
+    public function removeRole($role = null)
     {
-        $this->role = $role;
-    }
-
-    /**
-     * @return array
-     */
-    public function getRoles()
-    {
-        return [$this->getRole()];
+        if ($role instanceof Role) {
+            $this->roles->remove($role);
+        }
+        return $this;
     }
 
     /**
@@ -359,5 +406,13 @@ class User implements UserInterface
     public function preUpdate()
     {
         $this->updated = new \DateTime();
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getUsername();
     }
 }

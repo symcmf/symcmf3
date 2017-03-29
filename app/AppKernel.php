@@ -15,14 +15,18 @@ class AppKernel extends Kernel
             new Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle(),
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
+
+            new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle(),
+
             new AppBundle\AppBundle(),
-
-            // EasyAdminBundle
-            new JavierEguiluz\Bundle\EasyAdminBundle\EasyAdminBundle(),
-
             new AuthBundle\AuthBundle(),
             // Social Auth
             new KnpU\OAuth2ClientBundle\KnpUOAuth2ClientBundle(),
+
+            // EasyAdminBundle
+            new JavierEguiluz\Bundle\EasyAdminBundle\EasyAdminBundle(),
+            // Editor
+            new Ivory\CKEditorBundle\IvoryCKEditorBundle(),
 
         ];
 
