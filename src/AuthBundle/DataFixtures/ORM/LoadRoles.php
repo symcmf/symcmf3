@@ -1,67 +1,47 @@
 <?php
 namespace AuthBundle\DataFixtures\ORM;
 
+use AppBundle\DataFixtures\ORM\AbstractLoad;
 use AuthBundle\Entity\Role;
 use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\Common\DataFixtures\FixtureInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Load Project role
  */
-class LoadRoles implements FixtureInterface, ContainerAwareInterface
+class LoadRoles extends AbstractLoad
 {
     /**
-     * @var ContainerInterface
+     * @param $object
+     *
+     * @return mixed
      */
-    private $container;
-
-    public function setContainer(ContainerInterface $container = null)
-    {
-        $this->container = $container;
-    }
-
-    /**
-     * @param $roleInformation
-     * @return Role
-     */
-    private function createRole($roleInformation)
+    protected function createObject($object)
     {
         $role = new Role();
-        $role->setName($roleInformation['name']);
-        $role->setRole($roleInformation['role']);
+        $role->setName($object['name']);
+        $role->setRole($object['role']);
 
         return $role;
     }
 
     /**
-     * @param ObjectManager $manager
-     * @param $role
+     * @return array
      */
-    private function addRole(ObjectManager $manager, $role)
+    protected function getObjects()
     {
-        $manager->persist($role);
-        $manager->flush();
+        return [Role::$userRole, Role::$adminRole];
     }
 
     /**
-     * Load default role to db
-     *
      * @param ObjectManager $manager
+     * @param $object
+     *
+     * @return $object|null
      */
-    public function load(ObjectManager $manager)
+    protected function find(ObjectManager $manager, $object)
     {
-        $repository = $manager->getRepository(Role::class);
-
-        $role = $repository->findOneBy(['role' => Role::$userRole['role']]);
-        if (!$role) {
-            $this->addRole($manager, $this->createRole(Role::$userRole));
-        }
-
-        $role = $repository->findOneBy(['role' => Role::$adminRole['role']]);
-        if (!$role) {
-            $this->addRole($manager, $this->createRole(Role::$adminRole));
-        }
+        return $manager
+            ->getRepository(Role::class)
+            ->findOneBy(['role' => $object['role']]);
     }
 }

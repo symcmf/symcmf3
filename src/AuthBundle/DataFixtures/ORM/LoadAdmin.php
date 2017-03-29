@@ -1,80 +1,61 @@
 <?php
 namespace AuthBundle\DataFixtures\ORM;
 
+use AppBundle\DataFixtures\ORM\AbstractLoad;
 use AuthBundle\Entity\Role;
 use AuthBundle\Entity\User;
 use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\Common\DataFixtures\FixtureInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Class LoadAdmin
  * @package AuthBundle\DataFixtures\ORM
  */
-class LoadAdmin implements FixtureInterface, ContainerAwareInterface
+class LoadAdmin extends AbstractLoad
 {
-    /**
-     * @var ContainerInterface
-     */
-    private $container;
+    private $adminRole;
 
     /**
-     * @param ContainerInterface|null $container
-     */
-    public function setContainer(ContainerInterface $container = null)
-    {
-        $this->container = $container;
-    }
-
-    /**
-     * @param $userInformation
-     * @param $adminRole
+     * @param $object
      *
-     * @return User
+     * @return mixed
      */
-    private function createUser($userInformation, $adminRole)
+    protected function createObject($object)
     {
         $user = new User();
 
         $encoder = $this->container->get('security.password_encoder');
 
-        $user->setEmail($userInformation['email']);
-        $user->setName($userInformation['name']);
+        $user->setEmail($object['email']);
+        $user->setName($object['name']);
 
-        $password = $encoder->encodePassword($user, $userInformation['password']);
+        $password = $encoder->encodePassword($user, $object['password']);
 
         $user->setPassword($password);
         $user->setActivated(true);
-        $user->addRole($adminRole);
+        $user->addRole($this->adminRole);
 
         return $user;
     }
 
     /**
-     * @param ObjectManager $manager
-     * @param $user
+     * @return array
      */
-    private function addUser(ObjectManager $manager, $user)
+    protected function getObjects()
     {
-        $manager->persist($user);
-        $manager->flush();
+        return [User::$admin];
     }
 
     /**
-     * Load default role to db
-     *
      * @param ObjectManager $manager
+     * @param $object
+     *
+     * @return mixed
      */
-    public function load(ObjectManager $manager)
+    protected function find(ObjectManager $manager, $object)
     {
-        $repository = $manager->getRepository(User::class);
+        $this->adminRole = $manager
+            ->getRepository(Role::class)->findOneBy(['role' => Role::$adminRole['role']]);
 
-        $adminRole = $manager->getRepository(Role::class)->findOneBy(['role' => Role::$adminRole['role']]);
-
-        $user = $repository->findOneByEmail(User::$admin['email']);
-        if (!$user) {
-            $this->addUser($manager, $this->createUser(User::$admin, $adminRole));
-        }
+        return $manager->getRepository(User::class)->findOneByEmail($object['email']);
     }
 }

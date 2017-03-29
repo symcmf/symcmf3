@@ -22,7 +22,6 @@ easy_admin:
                     - facebookId
                     - googleId
                     - twitterId
-
         Category:
             class: PageBundle\Entity\Category
             edit:
@@ -35,3 +34,15 @@ easy_admin:
                     - name
                     - description
                     - activated
+        Article:
+            class: PageBundle\Entity\Article
+            edit:
+                fields:
+                    - title
+                    - category
+                    - { property: 'content', type: 'ckeditor', required: true }
+            new:
+                fields:
+                    - title
+                    - category
+                    - { property: 'content', type: 'ckeditor', required: true }
