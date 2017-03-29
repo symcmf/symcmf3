@@ -20,6 +20,8 @@ class AppKernel extends Kernel
 
             new AppBundle\AppBundle(),
             new AuthBundle\AuthBundle(),
+            new PageBundle\PageBundle(),
+
             // Social Auth
             new KnpU\OAuth2ClientBundle\KnpUOAuth2ClientBundle(),
 

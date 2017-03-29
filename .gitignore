@@ -19,3 +19,4 @@
 /.project
 /.vagrant/
 /composer.phar
+tests/_output/*

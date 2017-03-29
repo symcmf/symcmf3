@@ -21,6 +21,12 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class User implements UserInterface
 {
+    static public $admin = [
+        'name' => 'admin',
+        'email' => 'admin@mail.com',
+        'password' => 'admin',
+    ];
+
     /**
      * User constructor.
      */
