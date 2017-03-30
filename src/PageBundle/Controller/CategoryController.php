@@ -8,6 +8,7 @@ use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Request\ParamFetcherInterface;
 use FOS\RestBundle\View\View;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
+use NilPortugues\Symfony\JsonApiBundle\Serializer\JsonApiResponseTrait;
 use PageBundle\Entity\Category;
 use PageBundle\Form\CategoryType;
 use Symfony\Component\Form\Form;
@@ -17,6 +18,8 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class CategoryController extends FOSRestController
 {
+    use JsonApiResponseTrait;
+
     /**
      * @ApiDoc(
      *  description="This is a description of your API method",
@@ -61,6 +64,9 @@ class CategoryController extends FOSRestController
      *  }
      * )
      *
+     * @Symfony\Component\Routing\Annotation\Route("/categories/{id}", name="get_categories")
+     * @Sensio\Bundle\FrameworkExtraBundle\Configuration\Method({"GET"})
+     *
      * @param $id
      *
      * @return Category
@@ -73,7 +79,14 @@ class CategoryController extends FOSRestController
         if (!$category) {
             throw new NotFoundHttpException(sprintf('Category (%d) not found', $id));
         }
-        return $category;
+
+        $serializer = $this->get('nil_portugues.serializer.json_api_serializer');
+
+        /** @var \NilPortugues\Api\JsonApi\JsonApiTransformer $transformer */
+        $transformer = $serializer->getTransformer();
+        $transformer->setSelfUrl($this->generateUrl('get_categories', ['id' => $id], true));
+
+        return $this->response($serializer->serialize($category));
     }
 
     /**
