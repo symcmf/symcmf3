@@ -22,7 +22,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class User implements UserInterface
 {
     static public $admin = [
-        'name' => 'admin',
+        'username' => 'admin',
         'email' => 'admin@mail.com',
         'password' => 'admin',
     ];
@@ -67,7 +67,7 @@ class User implements UserInterface
      *
      * @ORM\Column(type="string", length=40)
      */
-    protected $name;
+    protected $username;
 
     /**
      * Many User have Many Roles.
@@ -272,19 +272,11 @@ class User implements UserInterface
     }
 
     /**
-     * @param $name
+     * @param $username
      */
-    public function setName($name)
+    public function setUsername($username)
     {
-        $this->name = $name;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
+        $this->username = $username;
     }
 
     /**
@@ -292,7 +284,7 @@ class User implements UserInterface
      */
     public function getUsername()
     {
-        return $this->email;
+        return $this->username;
     }
 
     /**

@@ -26,7 +26,7 @@ class LoadAdmin extends AbstractLoad
         $encoder = $this->container->get('security.password_encoder');
 
         $user->setEmail($object['email']);
-        $user->setName($object['name']);
+        $user->setUsername($object['username']);
 
         $password = $encoder->encodePassword($user, $object['password']);
 

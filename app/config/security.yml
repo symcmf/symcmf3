@@ -4,6 +4,7 @@ security:
 
     encoders:
         AuthBundle\Entity\User: bcrypt
+        Symfony\Component\Security\Core\User\User: plaintext
 
     # http://symfony.com/doc/current/security.html#b-configuring-how-users-are-loaded
     providers:
@@ -12,11 +13,42 @@ security:
         in_memory:
             memory: ~
 
+
     firewalls:
         # disables authentication for assets and the profiler, adapt it according to your needs
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+
+        login:
+            pattern:  ^/api/login
+            stateless: true
+            anonymous: true
+            provider:  database_users
+            form_login:
+                check_path:               /api/login_check
+                username_parameter:       email
+                password_parameter:       password
+                success_handler:          lexik_jwt_authentication.handler.authentication_success
+                failure_handler:          lexik_jwt_authentication.handler.authentication_failure
+                require_previous_session: false
+
+        api_doc:
+            pattern: ^/api/doc
+            security: false
+
+        api:
+            pattern: ^/api/
+            lexik_jwt:
+                authorization_header: # check token in Authorization Header
+                    enabled: true
+                    prefix:  Bearer
+                query_parameter:      # check token in query string parameter
+                    enabled: true
+                    name:    bearer
+                throw_exceptions:        false     # When an authentication failure occurs, return a 401 response immediately
+                create_entry_point:      true      # When no authentication details are provided, create a default entry point that returns a 401 response
+                authentication_provider: lexik_jwt_authentication.security.authentication.provider
 
         main:
             anonymous: true
@@ -27,9 +59,13 @@ security:
                 path: /logout
                 target: /
 
+
     access_control:
-          - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
-          - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
+          - { path: ^/login$,    role: IS_AUTHENTICATED_ANONYMOUSLY }
+          - { path: ^/register,  role: IS_AUTHENTICATED_ANONYMOUSLY }
+          - { path: ^/api/doc,   roles: IS_AUTHENTICATED_FULLY }
+          - { path: ^/api/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+          - { path: ^/api,       roles: IS_AUTHENTICATED_FULLY }
 
           # Secured part of the site
           # This config requires being logged for the whole site
