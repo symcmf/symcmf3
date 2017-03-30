@@ -2,7 +2,6 @@
 
 namespace PageBundle\Controller;
 
-use Doctrine\ORM\Tools\Pagination\Paginator;
 use Exception;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Controller\FOSRestController;
@@ -36,33 +35,16 @@ class CategoryController extends FOSRestController
      */
     public function getCategoriesAction(Request $request, ParamFetcherInterface $paramFetcher)
     {
+        $service = $this->get('page.service.category');
+
         $sortField = $paramFetcher->get('_sortField');
         $sortDir = $paramFetcher->get('_sortDir');
         $page = $paramFetcher->get('_page');
         $limit = $paramFetcher->get('_perPage');
-        $offset = ($page - 1) * $limit;
 
-        $em = $this->getDoctrine()->getManager();
-        $qb = $em->createQueryBuilder();
+        $categories = $service->getListOfEntity($sortField, $sortDir, $page, $limit);
+        $view = $this->view($categories, 200)->setHeader('X-Total-Count', $service->getTotalCount());
 
-        $qb->select('u')
-            ->from('PageBundle:Category', 'u');
-
-        if ($sortField && $sortDir) {
-            $qb->orderBy('u.' . $sortField, $sortDir);
-        }
-
-        $query = $qb->getQuery();
-
-        $query->setFirstResult($offset)
-            ->setMaxResults($limit);
-
-        $paginator = new Paginator($query);
-        $totalCount = $paginator->count();
-
-        $categories = $query->getResult();
-
-        $view = $this->view($categories, 200)->setHeader('X-Total-Count', $totalCount);
         return $this->handleView($view);
     }
 

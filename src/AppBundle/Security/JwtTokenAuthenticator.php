@@ -18,7 +18,6 @@ use Symfony\Component\Security\Guard\AbstractGuardAuthenticator;
 
 class JwtTokenAuthenticator extends AbstractGuardAuthenticator
 {
-
     /**
      * @var
      */

@@ -7,9 +7,9 @@ services:
 
     app.form_login_authenticator:
         class: AuthBundle\Security\FormLoginAuthenticator
-        arguments: ["@router", "@security.password_encoder"]
+        arguments: ['@router', '@security.password_encoder']
 
-    #base : '@doctrine.orm.default_entity_manager', '@session', '@router', '@translator'
+    #base params : '@doctrine.orm.default_entity_manager', '@session', '@router', '@translator'
 
     app.service.user:
         class: AuthBundle\Services\UserService
@@ -30,6 +30,10 @@ services:
     auth.service.reset_password:
         class: AuthBundle\Services\TokenServices\ResetPasswordService
         arguments: ['@doctrine.orm.default_entity_manager', '@session', '@router', '@translator', '@app.service.user', '@msg.service.mailer', '%title%']
+
+    page.service.category:
+        class: PageBundle\Services\CategoryService
+        arguments: ['@doctrine.orm.default_entity_manager', '@session', '@router', '@translator']
 
     jwt_token_authenticator:
         class: AppBundle\Security\JwtTokenAuthenticator
