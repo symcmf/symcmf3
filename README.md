@@ -54,9 +54,14 @@ Symfony3 CMF
     ```
     
 6. Generate the SSH keys :
-
+    > For Symfony3+, no need of the -p option
      ```
-       $ mkdir -p var/jwt # For Symfony3+, no need of the -p option
+       $ mkdir -p var/jwt 
+     ```
+    > Generate private and public key. This command will ask you to enter 
+     "pass_phrase". You have to enter this password in parameters.yml file
+     (jwt_key_pass_phrase)
+
        $ openssl genrsa -out var/jwt/private.pem -aes256 4096
        $ openssl rsa -pubout -in var/jwt/private.pem -out var/jwt/public.pem
      ```
