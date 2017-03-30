@@ -92,3 +92,15 @@ lexik_jwt_authentication:
     token_ttl:        '%jwt_token_ttl%'
 
 nelmio_api_doc: ~
+
+# FOSRest Configuration
+fos_rest:
+    body_listener: true
+    format_listener:
+        rules:
+            - { path: '^/', priorities: ['json'], fallback_format: json, prefer_extension: false }
+    param_fetcher_listener: true
+    view:
+        view_response_listener: 'force'
+        formats:
+            json: true

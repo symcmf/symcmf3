@@ -1,0 +1,6 @@
+api_category:
+    type:     rest
+    resource: PageBundle\Controller\CategoryController
+    prefix: /api
+    defaults:
+        _format: json
