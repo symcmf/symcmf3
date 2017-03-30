@@ -35,6 +35,11 @@ class AppKernel extends Kernel
             new Lexik\Bundle\JWTAuthenticationBundle\LexikJWTAuthenticationBundle(),
             new Nelmio\ApiDocBundle\NelmioApiDocBundle(),
 
+            new FOS\RestBundle\FOSRestBundle(),
+            new JMS\SerializerBundle\JMSSerializerBundle(),
+            new NilPortugues\Symfony\JsonApiBundle\NilPortuguesSymfonyJsonApiBundle(),
+
+
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {

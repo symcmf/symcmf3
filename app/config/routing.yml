@@ -22,3 +22,6 @@ api_login_check:
 NelmioApiDocBundle:
     resource: "@NelmioApiDocBundle/Resources/config/routing.yml"
     prefix:   /api/doc
+
+page_bundle_api:
+    resource: "@PageBundle/Resources/config/routing/api.yml"
