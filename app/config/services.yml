@@ -31,6 +31,6 @@ services:
         class: AuthBundle\Services\TokenServices\ResetPasswordService
         arguments: ['@doctrine.orm.default_entity_manager', '@session', '@router', '@translator', '@app.service.user', '@msg.service.mailer', '%title%']
 
-    app.jwt_token_authenticator:
-        parent: lexik_jwt_authentication.security.guard.jwt_token_authenticator
-        class: AuthBundle\Security\JwtTokenAuthenticator
+    jwt_token_authenticator:
+        class: AppBundle\Security\JwtTokenAuthenticator
+        autowire: true
