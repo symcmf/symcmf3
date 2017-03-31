@@ -21,7 +21,6 @@ class ArticleService extends AbstractApiService
 
     /**
      * @param $id
-     *
      * @return null|object
      */
     public function findById($id)

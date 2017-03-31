@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Services\FilterApi;
 use Exception;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Request\ParamFetcherInterface;
@@ -33,17 +34,49 @@ abstract class AbstractApiController extends FOSRestController
     /**
      * @param ParamFetcherInterface $paramFetcher
      *
+     * @return FilterApi
+     */
+    private function getFilterParams(ParamFetcherInterface $paramFetcher)
+    {
+        $filter = new FilterApi();
+
+        $filter->setSortField($paramFetcher->get('_sortField'));
+        $filter->setSortDir($paramFetcher->get('_sortDir'));
+        $filter->setPage($paramFetcher->get('_page'));
+        $filter->setPerPage($paramFetcher->get('_perPage'));
+
+        return $filter;
+
+    }
+
+    /**
+     * @param ParamFetcherInterface $paramFetcher
+     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     protected function getList(ParamFetcherInterface $paramFetcher)
     {
-        $sortField = $paramFetcher->get('_sortField');
-        $sortDir = $paramFetcher->get('_sortDir');
-        $page = $paramFetcher->get('_page');
-        $limit = $paramFetcher->get('_perPage');
+        $filter = $this->getFilterParams($paramFetcher);
 
-        $article = $this->getService()->getList($sortField, $sortDir, $page, $limit);
-        $view = $this->view($article, 200)->setHeader('X-Total-Count', $this->getService()->getTotalCount());
+        $objects = $this->getService()->getList($filter);
+        $view = $this->view($objects, Response::HTTP_OK)->setHeader('X-Total-Count', $this->getService()->getTotalCount());
+
+        return $this->handleView($view);
+    }
+
+    /**
+     * @param ParamFetcherInterface $paramFetcher
+     * @param $parentField
+     * @param $parentId
+     *
+     * @return Response
+     */
+    protected function getChildList(ParamFetcherInterface $paramFetcher, $parentField, $parentId)
+    {
+        $filter = $this->getFilterParams($paramFetcher);
+
+        $objects = $this->getService()->getChildList($filter, $parentField, $parentId);
+        $view = $this->view($objects, Response::HTTP_OK)->setHeader('X-Total-Count', $this->getService()->getTotalCount());
 
         return $this->handleView($view);
     }
