@@ -2,13 +2,14 @@
 
 namespace PageBundle\Form;
 
-use PageBundle\Entity\Category;
+use PageBundle\Entity\Article;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class CategoryType extends AbstractType
+class ArticleType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -17,9 +18,9 @@ class CategoryType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name', TextType::class)
-            ->add('description', TextType::class)
-            ->add('activated');
+            ->add('title', TextType::class)
+            ->add('content', TextType::class)
+            ->add('category', IntegerType::class);
     }
 
     /**
@@ -28,7 +29,7 @@ class CategoryType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Category::class,
+            'data_class' => Article::class,
             'csrf_protection' => false,
         ]);
     }
@@ -38,6 +39,6 @@ class CategoryType extends AbstractType
      */
     static public function getName()
     {
-        return 'category';
+        return 'article';
     }
 }

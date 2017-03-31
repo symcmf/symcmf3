@@ -119,7 +119,7 @@ class CategoryController extends FOSRestController
      *  output={ "class"="PageBundle\Entity\Category" },
      *  statusCodes={
      *      200="Returned when successful",
-     *      400="Returned when an error has occurred while message template creation",
+     *      400="Returned when an error has occurred while category creation",
      *  }
      * )
      *

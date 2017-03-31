@@ -19,9 +19,9 @@ Symfony3 CMF
 	
 2. Run composer
    
-       ```
+    ```
        composer install 
-       ```
+    ```
 3. Setup homestead/vagrant environment in project folder:
 	
     ```
@@ -64,10 +64,28 @@ Symfony3 CMF
 
        $ openssl genrsa -out var/jwt/private.pem -aes256 4096
        $ openssl rsa -pubout -in var/jwt/private.pem -out var/jwt/public.pem
+     
+       
+7. You need to log in vagrant with command and switch current directory to directory with project
+ 
      ```
+      vagrant ssh
+      cd symcmf3/
+     ```
+ 
+8. Create all the database tables
     
+      ```
+        ./bin/db.sh
+      ```
+        
+    > If you will get error "Permission denied" you have to change access rules with next command 
+    
+      ```
+        sudo chmod -R 777 bin/
+      ```
    
-7. After it, browse [http://192.168.10.10](http://192.168.10.10), you should see the main page of application.
+9. After it, browse [http://192.168.10.10](http://192.168.10.10), you should see the main page of application.
    Or add to your hosts file 
     
      ```

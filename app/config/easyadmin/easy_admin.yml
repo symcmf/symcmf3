@@ -28,6 +28,7 @@ easy_admin:
                 fields:
                     - name
                     - description
+                    - articles
                     - activated
             new:
                 fields:
