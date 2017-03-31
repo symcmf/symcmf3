@@ -97,9 +97,10 @@ nelmio_api_doc:
             formats:
                 - json
         request_format:
+            default_format: json
             method: accept_header
             formats:                            # default is `json` and `xml`,
-                json: application/json          # override to add custom formats or disable
+                json: application/vnd.api+json
 
 # FOSRest Configuration
 fos_rest:
@@ -118,3 +119,8 @@ fos_rest:
     routing_loader:
         default_format: json
         include_format: false
+
+nilportugues_json_api:
+    mappings:
+        - "%kernel.root_dir%/config/serializer/"
+        - "@PageBundle/Resourses/config/mappings"
