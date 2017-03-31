@@ -33,4 +33,12 @@ class CategoryType extends AbstractType
             'csrf_protection' => false,
         ]);
     }
+
+    /**
+     * @return string
+     */
+    static public function getName()
+    {
+        return 'category';
+    }
 }

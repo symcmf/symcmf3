@@ -12,13 +12,31 @@ use NilPortugues\Symfony\JsonApiBundle\Serializer\JsonApiResponseTrait;
 use PageBundle\Entity\Category;
 use PageBundle\Form\CategoryType;
 use Symfony\Component\Form\Form;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Controller\Annotations as Rest;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class CategoryController extends FOSRestController
 {
     use JsonApiResponseTrait;
+
+    /**
+     * @param $category
+     *
+     * @return Response
+     */
+    protected function getJsonApiResponse($category)
+    {
+        $serializer = $this->get('nil_portugues.serializer.json_api_serializer');
+
+        /** @var \NilPortugues\Api\JsonApi\JsonApiTransformer $transformer */
+        $transformer = $serializer->getTransformer();
+        $transformer->setSelfUrl($this->generateUrl('get_categories', ['id' => $category->getId()], true));
+
+        return $this->response($serializer->serialize($category));
+    }
 
     /**
      * @ApiDoc(
@@ -31,7 +49,7 @@ class CategoryController extends FOSRestController
      * @QueryParam(name="_sortField", nullable=true, description="Sort field.")
      * @QueryParam(name="_sortDir", nullable=true, description="Sort direction.")
      *
-     * @param Request               $request      the request object
+     * @param Request $request the request object
      * @param ParamFetcherInterface $paramFetcher param fetcher service
      *
      * @return array
@@ -136,7 +154,7 @@ class CategoryController extends FOSRestController
      *  }
      * )
      *
-     * @param int     $id      A category template identifier
+     * @param int $id A category template identifier
      * @param Request $request A Symfony request
      *
      * @return Category
@@ -164,7 +182,7 @@ class CategoryController extends FOSRestController
      *
      * @param int $id A category identifier
      *
-     * @return View
+     * @return View|JsonResponse
      *
      * @throws NotFoundHttpException
      */
@@ -174,17 +192,19 @@ class CategoryController extends FOSRestController
         $category = $this->getDoctrine()->getRepository(Category::class)->find($id);
 
         if (!$category) {
-            throw new NotFoundHttpException(sprintf('Category (%d) not found', $id));
+            return $this->jsonApiNotFoundError(CategoryType::getName(), $id);
         }
 
         try {
+
             $em->remove($category);
             $em->flush();
+
         } catch (Exception $e) {
             return View::create(['error' => $e->getMessage()], 400);
         }
 
-        return ['deleted' => true];
+        return new JsonResponse([], Response::HTTP_NO_CONTENT);
     }
 
     /**
@@ -195,10 +215,10 @@ class CategoryController extends FOSRestController
      */
     protected function handleWriteTemplate(Request $request, $id = null)
     {
-        $category = $id ? $this->getDoctrine()->getRepository(Category::class)->find($id): new Category();
+        $category = $id ? $this->getDoctrine()->getRepository(Category::class)->find($id) : new Category();
 
         if (!$category) {
-            throw new NotFoundHttpException(sprintf('Category (%d) not found', $id));
+            return $this->jsonApiNotFoundError(CategoryType::getName(), $id);
         }
 
         $form = $this->createForm(CategoryType::class, $category);
@@ -206,16 +226,67 @@ class CategoryController extends FOSRestController
         $data = json_decode($request->getContent(), true);
         $form->submit($data);
 
-        if ($form->isValid()) {
+        if (!$form->isValid()) {
+
+            return $this->jsonApiValidationErrors($form->getErrors(true));
+
+        } else {
 
             $category = $form->getData();
             $em = $this->getDoctrine()->getManager();
             $em->persist($category);
             $em->flush();
 
-            return $category;
-
+            return $this->getJsonApiResponse($category);
         }
+
         return $form;
+    }
+
+    // TODO need to create trait or abstract class to remove this functions
+
+    /**
+     * @param $formErrors
+     *
+     * @return JsonResponse
+     */
+    private function jsonApiValidationErrors($formErrors)
+    {
+        $errors = [];
+        foreach ($formErrors as $error) {
+            $row = [];
+
+            if ($error->getOrigin()) {
+                $row['status'] = Response::HTTP_UNPROCESSABLE_ENTITY;
+
+                $source['pointer'] = '/data/attributes/' . $error->getOrigin()->getName();
+                $row['source'] = $source;
+
+                $row['title'] = 'Invalid Attribute';
+                $row['detail'] = $error->getMessage();
+
+                $errors[] = $row;
+            }
+        }
+
+        $body['errors'] = $errors;
+        return new JsonResponse($body, Response::HTTP_UNPROCESSABLE_ENTITY);
+    }
+
+    /**
+     * @param $type
+     * @param $id
+     *
+     * @return JsonResponse
+     */
+    private function jsonApiNotFoundError($type, $id)
+    {
+        $body['errors'] = [
+            'id' => $id,
+            'status' => Response::HTTP_NOT_FOUND,
+            'title' => $type . ' not found',
+            'detail' => $type . ' ' . $id . 'is not available on this server',
+        ];
+        return new JsonResponse($body, Response::HTTP_NOT_FOUND);
     }
 }

@@ -93,33 +93,14 @@ lexik_jwt_authentication:
 
 nelmio_api_doc:
     sandbox:
-        authentication:
-          name: access_token
-          delivery: http
-          type:     basic
-          custom_endpoint: false
-        enabled:  true
-        endpoint: ~
-        accept_type: ~
         body_format:
-            formats: []
-            default_format: form
-        request_format:
             formats:
-                json: application/vnd.api+json
-            method: accept_header
+                - json
+        request_format:
             default_format: json
-        entity_to_choice: false
-
-#    sandbox:
-#        body_format:
-#            formats:
-#                - json
-#        request_format:
-#            default_format: json
-#            method: accept_header
-#            formats:                            # default is `json` and `xml`,
-#                json: application/vnd.api+json
+            method: accept_header
+            formats:                            # default is `json` and `xml`,
+                json: application/vnd.api+json
 
 # FOSRest Configuration
 fos_rest:
