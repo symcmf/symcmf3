@@ -2,6 +2,7 @@
 
 namespace PageBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -20,6 +21,11 @@ class Category
         'name' => 'default',
         'description' => 'default category'
     ];
+
+    public function __construct()
+    {
+        $this->articles = new ArrayCollection();
+    }
 
     /**
      * @var int
@@ -63,6 +69,50 @@ class Category
      * @ORM\Column(type="boolean")
      */
     private $activated = false;
+
+    /**
+     * One Category has Many Articles.
+     * @ORM\OneToMany(targetEntity="Article", mappedBy="category")
+     */
+    private $articles;
+
+    /**
+     * @param Article $article
+     *
+     * @return $this
+     */
+    public function addArticle(Article $article)
+    {
+        if ($article !== null) {
+            $article->setCategory($this);
+        }
+
+        if (!$this->articles->contains($article)) {
+            $this->articles->add($article);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Article $article
+     *
+     * @return $this
+     */
+    public function removeArticle(Article $article)
+    {
+        $this->articles->removeElement($article);
+
+        return $this;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getArticles()
+    {
+        return $this->articles;
+    }
 
     /**
      * @param boolean $activated

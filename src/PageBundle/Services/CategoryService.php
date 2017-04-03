@@ -2,55 +2,64 @@
 
 namespace PageBundle\Services;
 
-use AppBundle\Services\AbstractService;
-use Doctrine\ORM\Tools\Pagination\Paginator;
+use AppBundle\Services\AbstractApiService;
+use PageBundle\Entity\Article;
+use PageBundle\Entity\Category;
 
 /**
  * Class CategoryService
  * @package PageBundle\Services
  */
-class CategoryService extends AbstractService
+class CategoryService extends AbstractApiService
 {
     /**
-     * @var integer
+     * @return string
      */
-    private $totalCount;
-
-    /**
-     * @param $sortField
-     * @param $sortDir
-     * @param $page
-     * @param $limit
-     *
-     * @return array
-     */
-    public function getListOfEntity($sortField, $sortDir, $page, $limit)
+    protected function getClass()
     {
-        $offset = ($page - 1) * $limit;
-
-        $qb = $this->entityManager->createQueryBuilder();
-        $qb->select('category')
-            ->from('PageBundle:Category', 'category');
-
-        if ($sortField && $sortDir) {
-            $qb->orderBy('category.' . $sortField, $sortDir);
-        }
-
-        $query = $qb->getQuery();
-        $query->setFirstResult($offset)
-            ->setMaxResults($limit);
-
-        $paginator = new Paginator($query);
-        $this->totalCount = $paginator->count();
-
-        return $query->getResult();
+        return Category::class;
     }
 
     /**
-     * @return integer
+     * @return string
      */
-    public function getTotalCount()
+    protected function getChildClass()
     {
-        return $this->totalCount;
+        return Article::class;
+    }
+
+    /**
+     * @param $id
+     *
+     * @return mixed
+     */
+    public function findById($id)
+    {
+        return $this->entityManager->getRepository($this->getClass())->find($id);
+    }
+
+    /**
+     * @param $parentId
+     * @param $childId
+     *
+     * @return null|object
+     */
+    public function findChildById($parentId, $childId)
+    {
+        $category =  $this->entityManager->getRepository($this->getClass())->find($parentId);
+
+        if (!$category) {
+            return null;
+        }
+
+        $article = $this
+            ->entityManager
+            ->getRepository($this->getChildClass())
+            ->findOneBy([
+                'category' => $category->getId(),
+                'id' => $childId
+            ]);
+
+        return $article;
     }
 }

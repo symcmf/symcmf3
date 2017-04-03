@@ -89,8 +89,10 @@ class Article
      * @var Category
      *
      * Many Articles have One Category.
-     * @ORM\ManyToOne(targetEntity="Category")
+     * @ORM\ManyToOne(targetEntity="Category", inversedBy="articles")
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id", nullable=false)
+     *
+     * @Assert\NotNull
      */
     private $category;
 
@@ -181,5 +183,10 @@ class Article
     public function preUpdate()
     {
         $this->updated = new \DateTime();
+    }
+
+    public function __toString()
+    {
+        return $this->title;
     }
 }

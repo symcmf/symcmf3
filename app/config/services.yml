@@ -35,6 +35,13 @@ services:
         class: PageBundle\Services\CategoryService
         arguments: ['@doctrine.orm.default_entity_manager', '@session', '@router', '@translator']
 
+    page.service.article:
+        class: PageBundle\Services\ArticleService
+        arguments: ['@doctrine.orm.default_entity_manager', '@session', '@router', '@translator']
+
     jwt_token_authenticator:
         class: AppBundle\Security\JwtTokenAuthenticator
         autowire: true
+
+    app.api_filter:
+        class: AppBundle\Services\FilterApi

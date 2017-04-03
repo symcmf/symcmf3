@@ -2,13 +2,14 @@
 
 namespace PageBundle\Controller;
 
+use AppBundle\Controller\AbstractApiController;
 use Exception;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
-use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Request\ParamFetcherInterface;
 use FOS\RestBundle\View\View;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use NilPortugues\Symfony\JsonApiBundle\Serializer\JsonApiResponseTrait;
+use PageBundle\Entity\Article;
 use PageBundle\Entity\Category;
 use PageBundle\Form\CategoryType;
 use Symfony\Component\Form\Form;
@@ -18,9 +19,25 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class CategoryController extends FOSRestController
+class CategoryController extends AbstractApiController
 {
     use JsonApiResponseTrait;
+
+    /**
+     * @return object
+     */
+    protected function getService()
+    {
+        return $this->get('page.service.category');
+    }
+
+    /**
+     * @return string
+     */
+    protected function getType()
+    {
+        return 'category';
+    }
 
     /**
      * @param $category
@@ -56,17 +73,7 @@ class CategoryController extends FOSRestController
      */
     public function getCategoriesAction(Request $request, ParamFetcherInterface $paramFetcher)
     {
-        $service = $this->get('page.service.category');
-
-        $sortField = $paramFetcher->get('_sortField');
-        $sortDir = $paramFetcher->get('_sortDir');
-        $page = $paramFetcher->get('_page');
-        $limit = $paramFetcher->get('_perPage');
-
-        $categories = $service->getListOfEntity($sortField, $sortDir, $page, $limit);
-        $view = $this->view($categories, 200)->setHeader('X-Total-Count', $service->getTotalCount());
-
-        return $this->handleView($view);
+        return parent::getList($paramFetcher);
     }
 
     /**
@@ -93,18 +100,7 @@ class CategoryController extends FOSRestController
      */
     public function getCategoryAction($id)
     {
-        $category = $this->getDoctrine()->getRepository(Category::class)->find($id);
-        if (!$category) {
-            throw new NotFoundHttpException(sprintf('Category (%d) not found', $id));
-        }
-
-        $serializer = $this->get('nil_portugues.serializer.json_api_serializer');
-
-        /** @var \NilPortugues\Api\JsonApi\JsonApiTransformer $transformer */
-        $transformer = $serializer->getTransformer();
-        $transformer->setSelfUrl($this->generateUrl('get_categories', ['id' => $id], true));
-
-        return $this->response($serializer->serialize($category));
+        return parent::getEntity($id);
     }
 
     /**
@@ -119,7 +115,7 @@ class CategoryController extends FOSRestController
      *  output={ "class"="PageBundle\Entity\Category" },
      *  statusCodes={
      *      200="Returned when successful",
-     *      400="Returned when an error has occurred while message template creation",
+     *      400="Returned when an error has occurred while category creation",
      *  }
      * )
      *
@@ -131,7 +127,7 @@ class CategoryController extends FOSRestController
      */
     public function postCategoryAction(Request $request)
     {
-        return $this->handleWriteTemplate($request);
+        return parent::postEntity($request);
     }
 
 
@@ -163,7 +159,7 @@ class CategoryController extends FOSRestController
      */
     public function putCategoryAction($id, Request $request)
     {
-        return $this->handleWriteTemplate($request, $id);
+        return parent::putEntity($request, $id);
     }
 
     /**
@@ -188,20 +184,103 @@ class CategoryController extends FOSRestController
      */
     public function deleteCategoryAction($id)
     {
-        $em = $this->getDoctrine()->getManager();
-        $category = $this->getDoctrine()->getRepository(Category::class)->find($id);
+        return parent::deleteEntity($id);
+    }
 
-        if (!$category) {
-            return $this->jsonApiNotFoundError(CategoryType::getName(), $id);
+    /**
+     * Retrieves a specific article.
+     *
+     * @ApiDoc(
+     *  requirements={
+     *      {"name"="id", "dataType"="integer", "requirement"="\d+", "description"="category id"},
+     *      {"name"="aid", "dataType"="integer", "requirement"="\d+", "description"="article id"}
+     *  },
+     *  statusCodes={
+     *      200="Returned when successful",
+     *      404="Returned when article is not found"
+     *  }
+     * )
+     *
+     * @param $id
+     * @param $aid
+     *
+     * @return Article
+     *
+     * @throws NotFoundHttpException
+     */
+    public function getCategoryArticleAction($id, $aid)
+    {
+        $article = $this->getService()->findChildById($id, $aid);
+
+        if (!$article) {
+            throw new NotFoundHttpException(sprintf('Child Article (%d) not found', $aid));
+        }
+
+        return $article;
+    }
+
+    /**
+     * @ApiDoc(
+     *  requirements={
+     *      {"name"="id", "dataType"="integer", "requirement"="\d+", "description"="category id"}
+     *  },
+     *  description="This is a description of your API method",
+     * )
+     * List all users.
+     *
+     * @QueryParam(name="_page", requirements="\d+", default=1, nullable=true, description="Page number.")
+     * @QueryParam(name="_perPage", requirements="\d+", default=30, nullable=true, description="Limit.")
+     * @QueryParam(name="_sortField", nullable=true, description="Sort field.")
+     * @QueryParam(name="_sortDir", nullable=true, description="Sort direction.")
+     *
+     * @param $id
+     * @param ParamFetcherInterface $paramFetcher param fetcher service
+     *
+     * @return array
+     */
+    public function getCategoryArticlesAction($id, ParamFetcherInterface $paramFetcher)
+    {
+        $category = $this->getService()->findById($id);
+        return parent::getChildList($paramFetcher, 'category', $category->getId());
+    }
+
+    /**
+     * Deletes a category
+     *
+     * @ApiDoc(
+     *  requirements={
+     *      {"name"="id", "dataType"="integer", "requirement"="\d+", "description"="category id"},
+     *      {"name"="aid", "dataType"="integer", "requirement"="\d+", "description"="article id"}
+     *  },
+     *  statusCodes={
+     *      200="Returned when category is successfully deleted",
+     *      400="Returned when an error has occurred while article deletion",
+     *      404="Returned when unable to find category"
+     *  }
+     * )
+     *
+     * @param int $id A category identifier
+     * @param int $aid
+     *
+     * @return View|JsonResponse
+     *
+     * @throws NotFoundHttpException
+     */
+    public function deleteCategoryArticleAction($id, $aid)
+    {
+        $article = $this->getService()->findChildById($id, $aid);
+
+        if (!$article) {
+            throw new NotFoundHttpException(sprintf('Child Article (%d) not found', $aid));
         }
 
         try {
 
-            $em->remove($category);
-            $em->flush();
+            $this->getEntityManager()->remove($article);
+            $this->getEntityManager()->flush();
 
         } catch (Exception $e) {
-            return View::create(['error' => $e->getMessage()], 400);
+            return View::create(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
         }
 
         return new JsonResponse([], Response::HTTP_NO_CONTENT);
@@ -215,36 +294,27 @@ class CategoryController extends FOSRestController
      */
     protected function handleWriteTemplate(Request $request, $id = null)
     {
-        $category = $id ? $this->getDoctrine()->getRepository(Category::class)->find($id) : new Category();
-
-        if (!$category) {
-            return $this->jsonApiNotFoundError(CategoryType::getName(), $id);
-        }
+        $category = $id ? $this->getService()->findById($id) : new Category();
 
         $form = $this->createForm(CategoryType::class, $category);
 
         $data = json_decode($request->getContent(), true);
         $form->submit($data);
 
-        if (!$form->isValid()) {
-
-            return $this->jsonApiValidationErrors($form->getErrors(true));
-
-        } else {
+        if ($form->isValid()) {
 
             $category = $form->getData();
             $em = $this->getDoctrine()->getManager();
             $em->persist($category);
             $em->flush();
 
-            return $this->getJsonApiResponse($category);
+            return $category;
         }
 
         return $form;
     }
 
     // TODO need to create trait or abstract class to remove this functions
-
     /**
      * @param $formErrors
      *

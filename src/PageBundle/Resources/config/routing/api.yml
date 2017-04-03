@@ -4,3 +4,10 @@ api_category:
     prefix: /api
     defaults:
         _format: json
+
+api_article:
+    type:     rest
+    resource: PageBundle\Controller\ArticleController
+    prefix: /api
+    defaults:
+        _format: json
