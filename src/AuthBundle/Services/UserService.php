@@ -2,7 +2,7 @@
 
 namespace AuthBundle\Services;
 
-use AppBundle\Services\AbstractService;
+use AppBundle\Services\AbstractApiService;
 use AuthBundle\Entity\Role;
 use AuthBundle\Entity\User;
 use Doctrine\ORM\EntityManager;
@@ -17,7 +17,7 @@ use Symfony\Component\Translation\DataCollectorTranslator;
  * Class UserService
  * @package AuthBundle\Services
  */
-class UserService extends AbstractService
+class UserService extends AbstractApiService
 {
     /**
      * @var UserPasswordEncoder
@@ -183,5 +183,23 @@ class UserService extends AbstractService
         $user->addRole($role);
 
         return $this->saveObject($user);
+    }
+
+    /**
+     * @return string
+     */
+    protected function getClass()
+    {
+        return User::class;
+    }
+
+    /**
+     * @param $id
+     *
+     * @return mixed
+     */
+    public function findById($id)
+    {
+        return $this->findUserById($id);
     }
 }

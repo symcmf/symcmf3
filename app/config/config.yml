@@ -123,4 +123,3 @@ fos_rest:
 nilportugues_json_api:
     mappings:
         - "%kernel.root_dir%/config/serializer/"
-        - "@PageBundle/Resourses/config/mappings"

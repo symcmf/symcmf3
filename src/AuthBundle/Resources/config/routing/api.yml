@@ -1,0 +1,6 @@
+api_category:
+    type:     rest
+    resource: AuthBundle\Controller\AuthApiController
+    prefix: /api
+    defaults:
+        _format: json
