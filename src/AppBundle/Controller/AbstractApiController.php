@@ -38,7 +38,7 @@ abstract class AbstractApiController extends FOSRestController
      */
     private function getFilterParams(ParamFetcherInterface $paramFetcher)
     {
-        $filter = new FilterApi();
+        $filter = $this->get('app.api_filter');
 
         $filter->setSortField($paramFetcher->get('_sortField'));
         $filter->setSortDir($paramFetcher->get('_sortDir'));
