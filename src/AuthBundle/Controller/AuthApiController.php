@@ -6,7 +6,9 @@ use AppBundle\Controller\AbstractApiController;
 use AuthBundle\Entity\User;
 use AuthBundle\Form\FormEmail;
 use AuthBundle\Form\UserType;
+use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\Post;
+use FOS\RestBundle\View\View;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -59,13 +61,37 @@ class AuthApiController extends AbstractApiController
     }
 
     /**
+     * Get current user
+     *
+     * @ApiDoc(
+     *     section = "Auth",
+     *     output={ "class"="AuthBundle\Entity\User" },
+     *     statusCodes={
+     *      200="Token successfully get",
+     *      401="Bad credential",
+     *    }
+     * )
+     *
+     * @Get("/users/me")
+     */
+    public function getCurrentUserAction()
+    {
+        $token = $this->get('security.token_storage')->getToken();
+        if (null !== $token) {
+            return $token->getUser();
+        }
+        return $this->getUser();
+    }
+
+
+    /**
      * Sign out
      *
      * @ApiDoc(
      *   section = "Auth",
      *   input = {
      *      "class" = "AuthBundle\Form\UserType",
-     *      "options" = {"method" = "POST"},
+     *      "options" = {"method" = "POST", "csrf_protection" = false},
      *      "name" = ""
      *   },
      *  statusCodes={
@@ -124,13 +150,12 @@ class AuthApiController extends AbstractApiController
                 ->get('auth.service.reset_password')
                 ->sendResetMessage($email, $request->getSchemeAndHttpHost());
 
-            if ($result) {
+            if (!$result) {
                 // TODO need to implement JSONApi format
-                return new JsonResponse([], Response::HTTP_NO_CONTENT);
+                return View::create(['error' => 'email not found'], Response::HTTP_NOT_FOUND);
             }
 
-            // TODO need to implement JSONApi format
-            return new JsonResponse(['error' => 'email not found'], Response::HTTP_NOT_FOUND);
+            // nothing to return. Message was sent.
         }
 
         // TODO need to implement JSONApi format

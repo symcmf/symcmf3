@@ -25,12 +25,17 @@ class UserType extends AbstractType
 
         $builder
             ->add('username', TextType::class)
-            ->add('email', EmailType::class)
-            ->add('plainPassword', RepeatedType::class, [
+            ->add('email', EmailType::class);
+
+        if ($this->csrf) {
+            $builder->add('plainPassword', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'first_options' => ['label' => 'Password'],
                 'second_options' => ['label' => 'Confirm Password'],
             ]);
+        } else {
+            $builder->add('plainPassword', TextType::class);
+        }
     }
 
     /**

@@ -20,7 +20,9 @@ class ArticleType extends AbstractType
         $builder
             ->add('title', TextType::class)
             ->add('content', TextType::class)
-            ->add('category', IntegerType::class);
+            ->add('category', IntegerType::class, [
+                'label' => 'category_id'
+            ]);
     }
 
     /**

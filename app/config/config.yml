@@ -93,9 +93,15 @@ lexik_jwt_authentication:
 
 nelmio_api_doc:
     sandbox:
+        authentication:
+            name:           Authorization
+            delivery:       http
+            type:           bearer
+
         body_format:
             formats:
                 - json
+
         request_format:
             default_format: json
             method: accept_header
