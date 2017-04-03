@@ -9,7 +9,7 @@ confDir = $confDir ||= File.expand_path("vendor/laravel/homestead", File.dirname
 
 homesteadYamlPath = "Homestead.yaml"
 homesteadJsonPath = "Homestead.json"
-afterScriptPath = "after.sh"
+afterScriptPath = "setup.sh"
 aliasesPath = "aliases"
 
 require File.expand_path(confDir + '/scripts/homestead.rb')

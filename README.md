@@ -17,6 +17,12 @@ Symfony3 CMF
         git clone https://github.com/symcmf/symcmf3
     ```
 	
+	and switch current brunch to 'develop'
+	
+	 ```
+      git checkout develop
+     ```
+	
 2. Run composer
    
     ```
@@ -73,10 +79,10 @@ Symfony3 CMF
       cd symcmf3/
      ```
  
-8. Create all the database tables
+8. Create all the database tables and styles
     
       ```
-        ./bin/db.sh
+        ./bin/setup.sh
       ```
         
     > If you will get error "Permission denied" you have to change access rules with next command 
