@@ -5,6 +5,8 @@ namespace AuthBundle\Services;
 use AppBundle\Services\AbstractApiService;
 use AuthBundle\Entity\Role;
 use AuthBundle\Entity\User;
+use AuthBundle\Entity\UserRole;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -12,6 +14,7 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoder;
 use Symfony\Component\Translation\DataCollectorTranslator;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * Class UserService
@@ -179,8 +182,13 @@ class UserService extends AbstractApiService
             $this->saveObject($role);
         }
 
+        $userRole = new UserRole();
+        $userRole->setRole($role);
+        $userRole->setUser($user);
+        $this->saveObject($userRole);
+
         // set role
-        $user->addRole($role);
+        $user->addRole($userRole);
 
         return $this->saveObject($user);
     }
@@ -196,10 +204,57 @@ class UserService extends AbstractApiService
     }
 
     /**
+     * @param $userId
+     * @param $userRoleId
+     *
+     * @return null|object
+     */
+    public function getUserRoleById($userId, $userRoleId)
+    {
+        /** @var User $user */
+        $user =  $this->entityManager->getRepository($this->getClass())->find($userId);
+        /** @var Role $role */
+        $role = $this->entityManager->getRepository($this->getChildClass())->find($userRoleId);
+
+        if (!$user || !$role) {
+            return null;
+        }
+
+        foreach ($user->getRoles() as $role) {
+            if ($role->getId() == $userRoleId) {
+                return $role;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param $parentField
+     * @param $parentId
+     * @param $filter
+     * @param $manyToMany
+     *
+     * @return array
+     */
+    public function getChildList($filter, $parentField, $parentId, $manyToMany)
+    {
+        return parent::getChildList($filter, $parentField, $parentId, $manyToMany);
+    }
+
+    /**
      * @return string
      */
     protected function getClass()
     {
         return User::class;
+    }
+
+    /**
+     * @return string
+     */
+    protected function getChildClass()
+    {
+        return Role::class;
     }
 }

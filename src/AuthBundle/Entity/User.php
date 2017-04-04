@@ -70,14 +70,9 @@ class User implements UserInterface
     protected $username;
 
     /**
-     * Many User have Many Roles.
-     * @ORM\ManyToMany(targetEntity="AuthBundle\Entity\Role")
-     * @ORM\JoinTable(name="users_roles",
-     *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="role_id", referencedColumnName="id")}
-     *      )
+     * @ORM\OneToMany(targetEntity="AuthBundle\Entity\UserRole", mappedBy="user")
      */
-    protected $roles;
+    private $roles;
 
     /**
      * @Assert\Length(max=4096)
@@ -228,7 +223,7 @@ class User implements UserInterface
     }
 
     /**
-     * @return string
+     * @return array
      */
     public function getRoles()
     {
@@ -245,30 +240,31 @@ class User implements UserInterface
     }
 
     /**
-     * @param $role
+     * Add role
      *
-     * @return $this
+     * @param \AuthBundle\Entity\UserRole $userRole
+     *
+     * @return User
      */
-    public function addRole(Role $role = null)
+    public function addRole(\AuthBundle\Entity\UserRole $userRole)
     {
-        if (!$this->roles->contains($role)) {
-            $this->roles->add($role);
+        if ($userRole->getUser()) {
+            $userRole->setUser($this);
         }
+
+        $this->roles[] = $userRole;
 
         return $this;
     }
 
     /**
-     * @param null $role
+     * Remove role
      *
-     * @return $this
+     * @param \AuthBundle\Entity\UserRole $userRole
      */
-    public function removeRole($role = null)
+    public function removeRole(\AuthBundle\Entity\UserRole $userRole)
     {
-        if ($role instanceof Role) {
-            $this->roles->remove($role);
-        }
-        return $this;
+        $this->roles->removeElement($userRole);
     }
 
     /**
@@ -407,10 +403,12 @@ class User implements UserInterface
     }
 
     /**
-     * @return string
+     * Get activated
+     *
+     * @return boolean
      */
-    public function __toString()
+    public function getActivated()
     {
-        return $this->getUsername();
+        return $this->activated;
     }
 }

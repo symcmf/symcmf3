@@ -5,6 +5,7 @@ namespace AuthBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\Role\RoleInterface;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Role
@@ -57,6 +58,23 @@ class Role implements RoleInterface, \Serializable
      * @ORM\Column(type="string", unique=true)
      */
     private $name;
+
+    /**
+     * @ORM\OneToMany(targetEntity="AuthBundle\Entity\UserRole", mappedBy="role")
+     */
+    private $users;
+
+    public function __construct() {
+        $this->users = new ArrayCollection;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUsers()
+    {
+        return $this->users;
+    }
 
     /**
      * @return string
@@ -131,5 +149,29 @@ class Role implements RoleInterface, \Serializable
             $this->name,
             $this->role,
             ) = unserialize($serialized);
+    }
+
+    /**
+     * Add user
+     *
+     * @param \AuthBundle\Entity\UserRole $userRole
+     *
+     * @return Role
+     */
+    public function addUser(\AuthBundle\Entity\UserRole $userRole)
+    {
+        $this->users[] = $userRole;
+
+        return $this;
+    }
+
+    /**
+     * Remove user
+     *
+     * @param \AuthBundle\Entity\UserRole $userRole
+     */
+    public function removeUser(\AuthBundle\Entity\UserRole $userRole)
+    {
+        $this->users->removeElement($userRole);
     }
 }
