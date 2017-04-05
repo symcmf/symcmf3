@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+use AuthBundle\Entity\UserRole;
 
 /**
  * User
@@ -242,11 +243,11 @@ class User implements UserInterface
     /**
      * Add role
      *
-     * @param \AuthBundle\Entity\UserRole $userRole
+     * @param UserRole $userRole
      *
      * @return User
      */
-    public function addRole(\AuthBundle\Entity\UserRole $userRole)
+    public function addRole(UserRole $userRole)
     {
         if ($userRole->getUser()) {
             $userRole->setUser($this);
@@ -260,9 +261,9 @@ class User implements UserInterface
     /**
      * Remove role
      *
-     * @param \AuthBundle\Entity\UserRole $userRole
+     * @param UserRole $userRole
      */
-    public function removeRole(\AuthBundle\Entity\UserRole $userRole)
+    public function removeRole(UserRole $userRole)
     {
         $this->roles->removeElement($userRole);
     }

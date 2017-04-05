@@ -360,7 +360,7 @@ class UserService extends AbstractApiService
         $usersRoles = $userRoleRepository->getUserRoleByUserIdAndRoleId($id, $rid);
 
         if ($usersRoles) {
-            throw new BadRequestHttpException(sprintf('User with this roleId: (%d) already exists', $data['rid']));
+            throw new BadRequestHttpException(sprintf('User with this roleId: (%d) already exists', $rid));
         }
 
         $userRole = $this->saveUserRole($user, $role);
