@@ -11,9 +11,7 @@ use FOS\RestBundle\Controller\Annotations\Put;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Request\ParamFetcherInterface;
 use FOS\RestBundle\View\View;
-use MattJanssen\ApiResponseBundle\Annotation\ApiResponse;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
-use NilPortugues\Symfony\JsonApiBundle\Serializer\JsonApiResponseTrait;
 use PageBundle\Entity\Article;
 use PageBundle\Entity\Category;
 use PageBundle\Form\CategoryType;
@@ -26,9 +24,6 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class CategoryController extends AbstractApiController
 {
-
-    use JsonApiResponseTrait;
-
     /**
      * @return object
      */
@@ -124,8 +119,6 @@ class CategoryController extends AbstractApiController
      * @return Category|Form
      *
      * @throws NotFoundHttpException
-     *
-     * @ApiResponse(httpCode=201)
      *
      */
     public function postCategoryAction(Request $request)

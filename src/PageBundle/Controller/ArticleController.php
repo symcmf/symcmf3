@@ -3,7 +3,6 @@
 namespace PageBundle\Controller;
 
 use AppBundle\Controller\AbstractApiController;
-use Doctrine\Common\Util\ClassUtils;
 use FOS\RestBundle\Controller\Annotations\Delete;
 use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\Post;
@@ -12,7 +11,6 @@ use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Request\ParamFetcherInterface;
 use FOS\RestBundle\View\View;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
-use NilPortugues\Symfony\JsonApiBundle\Serializer\JsonApiResponseTrait;
 use PageBundle\Entity\Article;
 use PageBundle\Entity\Category;
 use PageBundle\Form\ArticleType;
