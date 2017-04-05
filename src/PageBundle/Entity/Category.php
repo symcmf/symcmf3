@@ -122,7 +122,7 @@ class Category
      */
     public function getArticles()
     {
-        return $this->articles->getValues();
+        return $this->articles;
     }
 
     /**

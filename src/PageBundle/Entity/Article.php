@@ -187,6 +187,6 @@ class Article
 
     public function __toString()
     {
-        return $this->getTitle();
+        return $this->title;
     }
 }
