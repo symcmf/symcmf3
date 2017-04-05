@@ -68,14 +68,15 @@ abstract class AbstractApiController extends FOSRestController
      * @param ParamFetcherInterface $paramFetcher
      * @param $parentField
      * @param $parentId
+     * @param $manyToMany
      *
      * @return Response
      */
-    protected function getChildList(ParamFetcherInterface $paramFetcher, $parentField, $parentId)
+    protected function getChildList(ParamFetcherInterface $paramFetcher, $parentField, $parentId, $manyToMany = [])
     {
         $filter = $this->getFilterParams($paramFetcher);
 
-        $objects = $this->getService()->getChildList($filter, $parentField, $parentId);
+        $objects = $this->getService()->getChildList($filter, $parentField, $parentId, $manyToMany);
         $view = $this->view($objects, Response::HTTP_OK)->setHeader('X-Total-Count', $this->getService()->getTotalCount());
 
         return $this->handleView($view);

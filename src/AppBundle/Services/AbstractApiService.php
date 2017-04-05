@@ -42,16 +42,29 @@ abstract class AbstractApiService extends AbstractService
      * @param $childClass
      * @param $parent
      * @param $parentId
+     * @param $manyToMany
      *
      * @return QueryBuilder
      */
-    private function getQueryChild($childClass, $parent, $parentId)
+    private function getQueryChild($childClass, $parent, $parentId, $manyToMany)
     {
         $qb = $this->entityManager->createQueryBuilder();
-        $qb
-            ->select('object')
-            ->from($childClass, 'object')
-            ->where('object.' . $parent . '=' . $parentId);
+        if ($manyToMany) {
+            $qb
+                ->select('classFrom')
+                ->from($manyToMany['classFrom'], 'classFrom')
+                ->innerJoin(
+                    $manyToMany['classJoin'], 'classJoin',
+                    'WITH',
+                    'classFrom.' . $manyToMany['classFromField'] . '=' . 'classJoin.' . $manyToMany['classJoinField']
+                )
+                ->where('classFrom.' . $manyToMany['fieldForWhere'] . '=' . $parentId);
+        } else {
+            $qb
+                ->select('classFrom')
+                ->from($childClass, 'classFrom')
+                ->where('classFrom.' . $parent . '=' . $parentId);
+        }
 
         return $qb;
     }
@@ -94,16 +107,17 @@ abstract class AbstractApiService extends AbstractService
      * @param $parentField
      * @param $parentId
      * @param $filter
+     * @param $manyToMany
      *
      * @return array
      */
-    public function getChildList($filter, $parentField, $parentId)
+    public function getChildList($filter, $parentField, $parentId, $manyToMany)
     {
         if (!$this->getChildClass()) {
             return [];
         }
 
-        $qr = $this->getQueryChild($this->getChildClass(), $parentField, $parentId);
+        $qr = $this->getQueryChild($this->getChildClass(), $parentField, $parentId, $manyToMany);
         return $this->filters($qr, $filter);
     }
 

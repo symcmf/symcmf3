@@ -4,3 +4,10 @@ api_auth:
     prefix: /api
     defaults:
         _format: json
+
+api_user:
+    type:     rest
+    resource: AuthBundle\Controller\UserController
+    prefix: /api
+    defaults:
+        _format: json
