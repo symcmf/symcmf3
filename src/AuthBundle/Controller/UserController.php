@@ -49,7 +49,7 @@ class UserController extends AbstractApiController
      * )
      * List all users.
      *
-     * @Get("/api/users")
+     * @Get("/users")
      *
      * @QueryParam(name="_page", requirements="\d+", default=1, nullable=true, description="Page number.")
      * @QueryParam(name="_perPage", requirements="\d+", default=30, nullable=true, description="Limit.")
@@ -80,7 +80,7 @@ class UserController extends AbstractApiController
      *  section="User"
      * )
      *
-     * @Get("/api/users/{id}")
+     * @Get("/users/{id}")
      *
      * @param $id
      *
@@ -111,7 +111,7 @@ class UserController extends AbstractApiController
      * )
      *
      * @Post(
-     *     "/api/users",
+     *     "/users",
      *      options={"csrf_protection" = false}
      * )
      *
@@ -149,7 +149,7 @@ class UserController extends AbstractApiController
      * )
      *
      * @Put(
-     *     "/api/users/{id}",
+     *     "/users/{id}",
      *      options={"csrf_protection" = false}
      * )
      *
@@ -180,7 +180,7 @@ class UserController extends AbstractApiController
      *  section="User"
      * )
      *
-     * @Delete("/api/users/{id}")
+     * @Delete("/users/{id}")
      *
      * @param int $id A user identifier
      *
@@ -225,7 +225,7 @@ class UserController extends AbstractApiController
      * )
      * List all user roles.
      *
-     * @Get("/api/users/{id}/roles")
+     * @Get("/users/{id}/roles")
      *
      * @QueryParam(name="_page", requirements="\d+", default=1, nullable=true, description="Page number.")
      * @QueryParam(name="_perPage", requirements="\d+", default=30, nullable=true, description="Limit.")
@@ -268,7 +268,7 @@ class UserController extends AbstractApiController
      *  section="User"
      * )
      *
-     * @Get("/api/users/{id}/roles/{rid}")
+     * @Get("/users/{id}/roles/{rid}")
      *
      * @param $id
      * @param $rid
@@ -305,7 +305,7 @@ class UserController extends AbstractApiController
      * )
      *
      * @Post(
-     *     "/api/users/{id}/roles",
+     *     "/users/{id}/roles",
      *      options={"csrf_protection" = false}
      * )
      *
@@ -340,7 +340,7 @@ class UserController extends AbstractApiController
      *  section="User"
      * )
      *
-     * @Delete("/api/users/{id}/roles/{rid}")
+     * @Delete("/users/{id}/roles/{rid}")
      *
      * @param int $id
      * @param int $rid
