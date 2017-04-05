@@ -1,0 +1,6 @@
+api_user:
+    type:     rest
+    resource: AuthBundle\Controller\UserController
+    prefix: /api
+    defaults:
+        _format: json
