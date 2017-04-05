@@ -1,4 +1,4 @@
-api_article:
+api_user:
     type:     rest
     resource: AuthBundle\Controller\UserController
     prefix: /api

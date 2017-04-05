@@ -66,7 +66,7 @@ abstract class AbstractService
      *
      * @throws \Exception
      */
-    protected function saveObject($object)
+    public function saveObject($object)
     {
         try {
 

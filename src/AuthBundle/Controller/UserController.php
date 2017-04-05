@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\Post;
@@ -330,30 +331,36 @@ class UserController extends AbstractApiController
      * @param $id
      * @param Request $request A Symfony request
      *
-     * @return User|Form
+     * @return JsonResponse
      *
+     * @throws BadRequestHttpException
      * @throws NotFoundHttpException
      */
     public function postUserRoleAction($id, Request $request)
     {
         $data = json_decode($request->getContent(), true);
+        $service = $this->getService();
+
+        $this->getService()->checkUserAndRole($id, $data['rid']);
+
         /** @var User $user */
-        $user =  $this->getEntityManager()->getRepository(User::class)->find($id);
+        $user =  $service->getUserById($id);
+
         /** @var Role $role */
-        $role =  $this->getEntityManager()->getRepository(Role::class)->find($data['rid']);
+        $role =  $service->getRoleById($data['rid']);
+
         /** @var UserRoleRepository $userRoleRepository */
         $userRoleRepository = $this->getEntityManager()->getRepository(UserRole::class);
         $usersRoles = $userRoleRepository->getUserRoleByUserIdAndRoleId($id, $data['rid']);
 
-        if (!$usersRoles) {
-            $userRole = new UserRole();
-            $userRole->setUser($user);
-            $userRole->setRole($role);
-            $user->addRole($userRole);
-            $this->getEntityManager()->persist($userRole);
-            $this->getEntityManager()->persist($user);
-            $this->getEntityManager()->flush();
+        if ($usersRoles) {
+            throw new BadRequestHttpException(sprintf('User with this roleId: (%d) already exists', $data['rid']));
         }
+
+        $userRole = $service->saveUserRole($user, $role);
+        $user->addRole($userRole);
+
+        return $this->getService()->saveObject($user);
     }
 
     /**
@@ -377,34 +384,22 @@ class UserController extends AbstractApiController
      * @param int $id
      * @param int $rid
      *
-     * @return View|JsonResponse
+     * @return JsonResponse
      *
      * @throws NotFoundHttpException
      */
     public function deleteUserRoleAction($id, $rid)
     {
-        /** @var User $user */
-        $user =  $this->getEntityManager()->getRepository(User::class)->find($id);
-        /** @var Role $role */
-        $role = $this->getService()->getUserRoleById($id, $rid);
+        $this->getService()->checkUserAndRole($id, $rid);
 
-        if (!$user|| !$role) {
-            throw new NotFoundHttpException('User or role not found');
+        /** @var UserRoleRepository $userRoleRepository */
+        $userRoleRepository = $this->getEntityManager()->getRepository(UserRole::class);
+        $usersRoles = $userRoleRepository->getUserRoleByUserIdAndRoleId($id, $rid);
+
+        foreach ($usersRoles as $userRole) {
+            $this->getEntityManager()->remove($userRole);
         }
-
-        try {
-            /** @var UserRoleRepository $userRoleRepository */
-            $userRoleRepository = $this->getEntityManager()->getRepository(UserRole::class);
-            $usersRoles = $userRoleRepository->getUserRoleByUserIdAndRoleId($id, $rid);
-
-            foreach ($usersRoles as $userRole) {
-                $this->getEntityManager()->remove($userRole);
-            }
-            $this->getEntityManager()->flush();
-
-        } catch (\Exception $e) {
-            return View::create(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
-        }
+        $this->getEntityManager()->flush();
 
         return new JsonResponse([], Response::HTTP_NO_CONTENT);
     }

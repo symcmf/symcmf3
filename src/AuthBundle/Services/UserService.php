@@ -6,15 +6,14 @@ use AppBundle\Services\AbstractApiService;
 use AuthBundle\Entity\Role;
 use AuthBundle\Entity\User;
 use AuthBundle\Entity\UserRole;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoder;
 use Symfony\Component\Translation\DataCollectorTranslator;
-use Doctrine\ORM\QueryBuilder;
 
 /**
  * Class UserService
@@ -182,10 +181,7 @@ class UserService extends AbstractApiService
             $this->saveObject($role);
         }
 
-        $userRole = new UserRole();
-        $userRole->setRole($role);
-        $userRole->setUser($user);
-        $this->saveObject($userRole);
+        $userRole = $this->saveUserRole($user, $role);
 
         // set role
         $user->addRole($userRole);
@@ -205,28 +201,78 @@ class UserService extends AbstractApiService
 
     /**
      * @param $userId
-     * @param $userRoleId
+     * @param $roleId
      *
      * @return null|object
      */
-    public function getUserRoleById($userId, $userRoleId)
+    public function getUserRoleById($userId, $roleId)
     {
         /** @var User $user */
         $user =  $this->entityManager->getRepository($this->getClass())->find($userId);
+
         /** @var Role $role */
-        $role = $this->entityManager->getRepository($this->getChildClass())->find($userRoleId);
+        $role = $this->entityManager->getRepository($this->getChildClass())->find($roleId);
 
         if (!$user || !$role) {
             return null;
         }
 
         foreach ($user->getRoles() as $role) {
-            if ($role->getId() == $userRoleId) {
+            if ($role->getId() == $roleId) {
                 return $role;
             }
         }
 
         return null;
+    }
+
+    /**
+     * @param $id
+     * @return User|null
+     */
+    public function getUserById($id)
+    {
+        /** @var User $user */
+        $user =  $this->entityManager->getRepository(User::class)->find($id);
+
+        if (!$user) {
+            return null;
+        }
+
+        return $user;
+    }
+
+    /**
+     * @param $id
+     * @return Role|null
+     */
+    public function getRoleById($id)
+    {
+        /** @var Role $role */
+        $role =  $this->entityManager->getRepository(Role::class)->find($id);
+
+        if (!$role) {
+            return null;
+        }
+
+        return $role;
+    }
+
+    /**
+     * @param $userId
+     * @param $roleId
+     * @return bool
+     */
+    public function checkUserAndRole($userId, $roleId)
+    {
+        $user = $this->getUserById($userId);
+        $role = $this->getRoleById($roleId);
+
+        if (!$user || !$role) {
+            throw new NotFoundHttpException('User or role not found');
+        }
+
+        return true;
     }
 
     /**
@@ -256,5 +302,21 @@ class UserService extends AbstractApiService
     protected function getChildClass()
     {
         return Role::class;
+    }
+
+    /**
+     * @param User $user
+     * @param Role $role
+     * @return UserRole
+     */
+    public function saveUserRole(User $user, Role $role)
+    {
+        $userRole = new UserRole();
+        $userRole->setRole($role);
+        $userRole->setUser($user);
+
+        $this->saveObject($userRole);
+
+        return $userRole;
     }
 }

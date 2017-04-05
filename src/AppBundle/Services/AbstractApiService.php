@@ -60,9 +60,9 @@ abstract class AbstractApiService extends AbstractService
                 ->where('classFrom.' . $manyToMany['fieldForWhere'] . '=' . $parentId);
         } else {
             $qb
-                ->select('object')
-                ->from($childClass, 'object')
-                ->where('object.' . $parent . '=' . $parentId);
+                ->select('classFrom')
+                ->from($childClass, 'classFrom')
+                ->where('classFrom.' . $parent . '=' . $parentId);
         }
 
         return $qb;

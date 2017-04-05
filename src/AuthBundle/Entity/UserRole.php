@@ -3,6 +3,8 @@
 namespace AuthBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use AuthBundle\Entity\User;
+use AuthBundle\Entity\Role;
 
 /**
  * UserRole
@@ -47,11 +49,11 @@ class UserRole
     /**
      * Set user
      *
-     * @param \AuthBundle\Entity\User $user
+     * @param User $user
      *
      * @return UserRole
      */
-    public function setUser(\AuthBundle\Entity\User $user = null)
+    public function setUser(User $user = null)
     {
         $this->user = $user;
 
@@ -61,7 +63,7 @@ class UserRole
     /**
      * Get user
      *
-     * @return \AuthBundle\Entity\User
+     * @return User
      */
     public function getUser()
     {
@@ -71,11 +73,11 @@ class UserRole
     /**
      * Set role
      *
-     * @param \AuthBundle\Entity\Role $role
+     * @param Role $role
      *
      * @return UserRole
      */
-    public function setRole(\AuthBundle\Entity\Role $role = null)
+    public function setRole(Role $role = null)
     {
         $this->role = $role;
 
@@ -85,7 +87,7 @@ class UserRole
     /**
      * Get role
      *
-     * @return \AuthBundle\Entity\Role
+     * @return Role
      */
     public function getRole()
     {

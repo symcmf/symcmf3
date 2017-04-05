@@ -26,5 +26,5 @@ NelmioApiDocBundle:
 page_bundle_api:
     resource: "@PageBundle/Resources/config/routing/api.yml"
 
-user_bundle_api:
+auth_bundle_api:
     resource: "@AuthBundle/Resources/config/routing/api.yml"

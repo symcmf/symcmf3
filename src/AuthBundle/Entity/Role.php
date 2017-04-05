@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\Role\RoleInterface;
 use Doctrine\Common\Collections\ArrayCollection;
+use AuthBundle\Entity\UserRole;
 
 /**
  * Role
@@ -69,7 +70,7 @@ class Role implements RoleInterface, \Serializable
     }
 
     /**
-     * @return string
+     * @return ArrayCollection
      */
     public function getUsers()
     {
@@ -154,11 +155,11 @@ class Role implements RoleInterface, \Serializable
     /**
      * Add user
      *
-     * @param \AuthBundle\Entity\UserRole $userRole
+     * @param UserRole $userRole
      *
      * @return Role
      */
-    public function addUser(\AuthBundle\Entity\UserRole $userRole)
+    public function addUser(UserRole $userRole)
     {
         $this->users[] = $userRole;
 
@@ -168,9 +169,9 @@ class Role implements RoleInterface, \Serializable
     /**
      * Remove user
      *
-     * @param \AuthBundle\Entity\UserRole $userRole
+     * @param UserRole $userRole
      */
-    public function removeUser(\AuthBundle\Entity\UserRole $userRole)
+    public function removeUser(UserRole $userRole)
     {
         $this->users->removeElement($userRole);
     }
