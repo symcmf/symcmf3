@@ -1,4 +1,4 @@
-api_category:
+api_auth:
     type:     rest
     resource: AuthBundle\Controller\AuthApiController
     prefix: /api

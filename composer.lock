@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "5d026c4e153418fbefaefaa4ddeedd16",
+    "content-hash": "644eeb3b8e93fe8dba5850f4d17796eb",
     "packages": [
         {
             "name": "composer/ca-bundle",
@@ -2435,54 +2435,6 @@
             "time": "2016-07-12T22:15:40+00:00"
         },
         {
-            "name": "mattjanssen/api-response-bundle",
-            "version": "v0.1.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/mattjanssen/api-response-bundle.git",
-                "reference": "78130544deb33d5c01c57c3bb24ef9847b5f9683"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/mattjanssen/api-response-bundle/zipball/78130544deb33d5c01c57c3bb24ef9847b5f9683",
-                "reference": "78130544deb33d5c01c57c3bb24ef9847b5f9683",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^5.4|^7",
-                "sensio/framework-extra-bundle": "^3",
-                "symfony/symfony": "^2.3|^3"
-            },
-            "require-dev": {
-                "jms/serializer-bundle": "^1",
-                "mockery/mockery": "^0.9.5",
-                "phpunit/phpunit": "^4.0"
-            },
-            "suggest": {
-                "jms/serializer-bundle": "For serializing with the JMS Serializer"
-            },
-            "type": "symfony-bundle",
-            "autoload": {
-                "psr-4": {
-                    "MattJanssen\\ApiResponseBundle\\": "src/",
-                    "MattJanssen\\ApiResponseBundle\\Test\\": "tests/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Matt Janssen",
-                    "email": "matt@mattjanssen.com"
-                }
-            ],
-            "description": "Symfony bundle for transforming controller action returns and exceptions into JSON API responses",
-            "homepage": "https://github.com/mattjanssen/api-response-bundle",
-            "time": "2016-12-31T02:17:38+00:00"
-        },
-        {
             "name": "michelf/php-markdown",
             "version": "1.7.0",
             "source": {
@@ -4635,37 +4587,34 @@
         },
         {
             "name": "facebook/webdriver",
-            "version": "1.4.0",
+            "version": "1.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/facebook/php-webdriver.git",
-                "reference": "3ea034c056189e11c0ce7985332a9f4b5b2b5db2"
+                "reference": "77300c4ab2025d4316635f592ec849ca7323bd8c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/facebook/php-webdriver/zipball/3ea034c056189e11c0ce7985332a9f4b5b2b5db2",
-                "reference": "3ea034c056189e11c0ce7985332a9f4b5b2b5db2",
+                "url": "https://api.github.com/repos/facebook/php-webdriver/zipball/77300c4ab2025d4316635f592ec849ca7323bd8c",
+                "reference": "77300c4ab2025d4316635f592ec849ca7323bd8c",
                 "shasum": ""
             },
             "require": {
                 "ext-curl": "*",
-                "ext-zip": "*",
                 "php": "^5.5 || ~7.0",
                 "symfony/process": "^2.8 || ^3.1"
             },
             "require-dev": {
-                "friendsofphp/php-cs-fixer": "^2.0",
+                "friendsofphp/php-cs-fixer": "^1.11",
                 "php-mock/php-mock-phpunit": "^1.1",
                 "phpunit/phpunit": "4.6.* || ~5.0",
                 "satooshi/php-coveralls": "^1.0",
                 "squizlabs/php_codesniffer": "^2.6"
             },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-community": "1.5-dev"
-                }
+            "suggest": {
+                "phpdocumentor/phpdocumentor": "2.*"
             },
+            "type": "library",
             "autoload": {
                 "psr-4": {
                     "Facebook\\WebDriver\\": "lib/"
@@ -4675,7 +4624,7 @@
             "license": [
                 "Apache-2.0"
             ],
-            "description": "A PHP client for Selenium WebDriver",
+            "description": "A PHP client for WebDriver",
             "homepage": "https://github.com/facebook/php-webdriver",
             "keywords": [
                 "facebook",
@@ -4683,7 +4632,7 @@
                 "selenium",
                 "webdriver"
             ],
-            "time": "2017-03-22T10:56:03+00:00"
+            "time": "2017-01-13T15:48:08+00:00"
         },
         {
             "name": "phpdocumentor/reflection-common",

@@ -27,7 +27,6 @@
         "league/oauth2-facebook": "^1.4",
         "lexik/jwt-authentication-bundle": "^2.2",
         "lusitanian/oauth": "^0.8.9",
-        "mattjanssen/api-response-bundle": "^0.1.2",
         "nelmio/api-doc-bundle": "^2.13",
         "nilportugues/jsonapi-bundle": "^1.5",
         "sensio/distribution-bundle": "^5.0",
