@@ -3,7 +3,6 @@
 namespace PageBundle\Controller;
 
 use AppBundle\Controller\AbstractApiController;
-use Exception;
 use FOS\RestBundle\Controller\Annotations\Delete;
 use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\Post;
@@ -282,20 +281,7 @@ class CategoryController extends AbstractApiController
      */
     public function deleteCategoryArticleAction($id, $aid)
     {
-        $article = $this->getService()->findChildById($id, $aid);
-
-        if (!$article) {
-            throw new NotFoundHttpException(sprintf('Child Article (%d) not found', $aid));
-        }
-
-        try {
-
-            $this->getEntityManager()->remove($article);
-            $this->getEntityManager()->flush();
-
-        } catch (Exception $e) {
-            return View::create(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
-        }
+        $this->getService()->removeChildEntity($id, $aid);
 
         return new JsonResponse([], Response::HTTP_NO_CONTENT);
     }
@@ -318,9 +304,7 @@ class CategoryController extends AbstractApiController
         if ($form->isValid()) {
 
             $category = $form->getData();
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($category);
-            $em->flush();
+            $this->getService()->saveCategory($category);
 
             return $category;
         }

@@ -5,6 +5,7 @@ namespace PageBundle\Services;
 use AppBundle\Services\AbstractApiService;
 use PageBundle\Entity\Article;
 use PageBundle\Entity\Category;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Class CategoryService
@@ -61,5 +62,31 @@ class CategoryService extends AbstractApiService
             ]);
 
         return $article;
+    }
+
+    /**
+     * @param $id
+     * @param $cid
+     */
+    public function removeChildEntity($id, $cid)
+    {
+        $child = $this->findChildById($id, $cid);
+        if (!$child) {
+            throw new NotFoundHttpException(sprintf('Child (%d) not found', $cid));
+        }
+
+        $this->removeObject($child);
+    }
+
+    /**
+     * @param $entity
+     *
+     * @return Category
+     */
+    public function saveCategory($entity)
+    {
+        $this->saveObject($entity);
+
+        return $entity;
     }
 }

@@ -244,19 +244,7 @@ class ArticleController extends AbstractApiController
      */
     public function putArticleCategoryAction($id, $cid)
     {
-        $article = $this->getService()->findById($id);
-        $category = $this->getDoctrine()->getRepository(Category::class)->find($cid);
-
-        if (!$category) {
-            throw new NotFoundHttpException(sprintf('Category (%d) not found', $cid));
-        }
-
-        $article->setCategory($category);
-
-        $this->getDoctrine()->getManager()->persist($article);
-        $this->getDoctrine()->getManager()->flush();
-
-        return $article;
+        return $this->getService()->updateChildEntity($id, $cid);
     }
 
     /**
@@ -284,19 +272,10 @@ class ArticleController extends AbstractApiController
         if ($form->isValid()) {
 
             $categoryId = $request->get('category');
-
-            $category = $this->getDoctrine()->getRepository(Category::class)->find($categoryId);
-            if (!$category) {
-                throw new NotFoundHttpException(sprintf('Category (%d) not found ', $categoryId));
-            }
-
             $article = $form->getData();
-            $article->setCategory($category);
 
-            $this->getEntityManager()->persist($article);
-            $this->getEntityManager()->flush();
+            return $this->getService()->saveArticle($article, $categoryId);
 
-            return $article;
         }
 
         return $form;
