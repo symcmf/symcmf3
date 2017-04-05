@@ -10,7 +10,6 @@ use AuthBundle\Form\UserType;
 use AuthBundle\Repository\UserRoleRepository;
 use FOS\RestBundle\Request\ParamFetcherInterface;
 use FOS\RestBundle\View\View;
-use NilPortugues\Symfony\JsonApiBundle\Serializer\JsonApiResponseTrait;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,8 +26,6 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
 class UserController extends AbstractApiController
 {
-    use JsonApiResponseTrait;
-
     /**
      * @return \AuthBundle\Services\UserService
      */
@@ -46,29 +43,13 @@ class UserController extends AbstractApiController
     }
 
     /**
-     * @param User $user
-     *
-     * @return Response
-     */
-    protected function getJsonApiResponse(User $user)
-    {
-        $serializer = $this->get('nil_portugues.serializer.json_api_serializer');
-
-        /** @var \NilPortugues\Api\JsonApi\JsonApiTransformer $transformer */
-        $transformer = $serializer->getTransformer();
-        $transformer->setSelfUrl($this->generateUrl('get_users', ['id' => $user->getId()], true));
-
-        return $this->response($serializer->serialize($user));
-    }
-
-    /**
      * @ApiDoc(
      *  description="This is a description of your API method",
      *  section="User"
      * )
      * List all users.
      *
-     * @Get("/api/users")
+     * @Get("/users")
      *
      * @QueryParam(name="_page", requirements="\d+", default=1, nullable=true, description="Page number.")
      * @QueryParam(name="_perPage", requirements="\d+", default=30, nullable=true, description="Limit.")
@@ -99,7 +80,7 @@ class UserController extends AbstractApiController
      *  section="User"
      * )
      *
-     * @Get("/api/users/{id}")
+     * @Get("/users/{id}")
      *
      * @param $id
      *
@@ -130,7 +111,7 @@ class UserController extends AbstractApiController
      * )
      *
      * @Post(
-     *     "/api/users",
+     *     "/users",
      *      options={"csrf_protection" = false}
      * )
      *
@@ -168,7 +149,7 @@ class UserController extends AbstractApiController
      * )
      *
      * @Put(
-     *     "/api/users/{id}",
+     *     "/users/{id}",
      *      options={"csrf_protection" = false}
      * )
      *
@@ -199,7 +180,7 @@ class UserController extends AbstractApiController
      *  section="User"
      * )
      *
-     * @Delete("/api/users/{id}")
+     * @Delete("/users/{id}")
      *
      * @param int $id A user identifier
      *
@@ -244,7 +225,7 @@ class UserController extends AbstractApiController
      * )
      * List all user roles.
      *
-     * @Get("/api/users/{id}/roles")
+     * @Get("/users/{id}/roles")
      *
      * @QueryParam(name="_page", requirements="\d+", default=1, nullable=true, description="Page number.")
      * @QueryParam(name="_perPage", requirements="\d+", default=30, nullable=true, description="Limit.")
@@ -287,7 +268,7 @@ class UserController extends AbstractApiController
      *  section="User"
      * )
      *
-     * @Get("/api/users/{id}/roles/{rid}")
+     * @Get("/users/{id}/roles/{rid}")
      *
      * @param $id
      * @param $rid
@@ -324,7 +305,7 @@ class UserController extends AbstractApiController
      * )
      *
      * @Post(
-     *     "/api/users/{id}/roles",
+     *     "/users/{id}/roles",
      *      options={"csrf_protection" = false}
      * )
      *
@@ -359,7 +340,7 @@ class UserController extends AbstractApiController
      *  section="User"
      * )
      *
-     * @Delete("/api/users/{id}/roles/{rid}")
+     * @Delete("/users/{id}/roles/{rid}")
      *
      * @param int $id
      * @param int $rid

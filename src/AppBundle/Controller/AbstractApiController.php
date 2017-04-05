@@ -140,7 +140,6 @@ abstract class AbstractApiController extends FOSRestController
             return View::create(['error' => $e->getMessage()], 400);
         }
 
-        return new JsonResponse([], Response::HTTP_NO_CONTENT);
     }
 
     /**

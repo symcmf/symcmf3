@@ -4,6 +4,7 @@ namespace AppBundle\Services;
 
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Class AbstractApiService
@@ -130,6 +131,25 @@ abstract class AbstractApiService extends AbstractService
      */
     protected function getChildClass()
     {
+        return null;
+    }
+
+    /**
+     * @param $childId
+     *
+     * @return null|object
+     */
+    public function getChildEntity($childId)
+    {
+        if ($this->getChildClass()) {
+            $child =  $this->entityManager->getRepository($this->getChildClass())->find($childId);
+            if (!$child) {
+                throw new NotFoundHttpException(sprintf('Child object (%d) not found ', $childId));
+            }
+
+            return $child;
+        }
+
         return null;
     }
 

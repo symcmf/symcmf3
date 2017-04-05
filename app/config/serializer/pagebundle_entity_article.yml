@@ -1,8 +1,0 @@
-mapping:
-    class: PageBundle\Entity\Category
-    id_properties:
-        - id
-    hide_properties:
-        - default
-    urls:
-        self: get_categories  #@Route name

@@ -79,7 +79,7 @@ class ResetPasswordService extends TokenService implements TokenMessageInterface
             return null;
         }
 
-        return $this->userService->findUserById($userToken->getUserId());
+        return $this->userService->findById($userToken->getUserId());
     }
 
     /**

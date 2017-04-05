@@ -94,17 +94,18 @@ lexik_jwt_authentication:
 nelmio_api_doc:
     sandbox:
         authentication:
-            name:       Authorization
-            delivery:   http
-            type:       bearer
+            name:           Authorization
+            delivery:       http
+            type:           bearer
         body_format:
             formats:
                 - json
+
         request_format:
-            default_format: json
-            method: accept_header
-            formats:                            # default is `json` and `xml`,
+            formats:
                 json: application/vnd.api+json
+            method: accept_header
+            default_format: json
 
 # FOSRest Configuration
 fos_rest:
@@ -123,8 +124,3 @@ fos_rest:
     routing_loader:
         default_format: json
         include_format: false
-
-nilportugues_json_api:
-    mappings:
-        - "%kernel.root_dir%/config/serializer/"
-        - "@PageBundle/Resourses/config/mappings"

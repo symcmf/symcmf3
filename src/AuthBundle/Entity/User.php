@@ -60,6 +60,9 @@ class User implements UserInterface
      * @var string
      *
      * @ORM\Column(type="string", length=255, unique=true)
+     *
+     * @Assert\Email()
+     * @Assert\NotNull()
      */
     protected $email;
 
@@ -67,6 +70,9 @@ class User implements UserInterface
      * @var string
      *
      * @ORM\Column(type="string", length=40)
+     *
+     * @Assert\NotBlank()
+     * @Assert\NotNull()
      */
     protected $username;
 
@@ -77,6 +83,9 @@ class User implements UserInterface
 
     /**
      * @Assert\Length(max=4096)
+     *
+     * @Assert\NotBlank()
+     * @Assert\NotNull()
      */
     protected $plainPassword;
 

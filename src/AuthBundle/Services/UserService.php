@@ -79,18 +79,6 @@ class UserService extends AbstractApiService
     }
 
     /**
-     * @param $id
-     *
-     * @return User|null
-     */
-    public function findUserById($id)
-    {
-        return $this->entityManager
-            ->getRepository(User::class)
-            ->find($id);
-    }
-
-    /**
      * @param $email
      *
      * @return User|null

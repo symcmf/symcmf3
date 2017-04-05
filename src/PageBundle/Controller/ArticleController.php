@@ -3,6 +3,10 @@
 namespace PageBundle\Controller;
 
 use AppBundle\Controller\AbstractApiController;
+use FOS\RestBundle\Controller\Annotations\Delete;
+use FOS\RestBundle\Controller\Annotations\Get;
+use FOS\RestBundle\Controller\Annotations\Post;
+use FOS\RestBundle\Controller\Annotations\Put;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Request\ParamFetcherInterface;
 use FOS\RestBundle\View\View;
@@ -42,7 +46,10 @@ class ArticleController extends AbstractApiController
      *
      * @ApiDoc(
      *     section = "Articles",
-     *     description="This is a description of your API method",
+     *     description="List of articles",
+     *     statusCodes={
+     *          200="Returned list of articles",
+     *     }
      * )
      *
      * List all articles.
@@ -54,6 +61,8 @@ class ArticleController extends AbstractApiController
      *
      * @param Request $request the request object
      * @param ParamFetcherInterface $paramFetcher param fetcher service
+     *
+     * @Get("/articles")
      *
      * @return array
      */
@@ -76,8 +85,7 @@ class ArticleController extends AbstractApiController
      *  }
      * )
      *
-     * @Symfony\Component\Routing\Annotation\Route("/articles/{id}", name="get_articles")
-     * @Sensio\Bundle\FrameworkExtraBundle\Configuration\Method({"GET"})
+     * @Get("/articles/{id}")
      *
      * @param $id
      *
@@ -106,6 +114,8 @@ class ArticleController extends AbstractApiController
      *      400="Returned when an error has occurred while article creation",
      *  }
      * )
+     *
+     * @Post("/articles")
      *
      * @param Request $request A Symfony request
      *
@@ -139,6 +149,8 @@ class ArticleController extends AbstractApiController
      *  }
      * )
      *
+     * @Put("/articles/{id}")
+     *
      * @param int $id A category template identifier
      * @param Request $request A Symfony request
      *
@@ -166,6 +178,8 @@ class ArticleController extends AbstractApiController
      *  }
      * )
      *
+     * @Delete("/articles/{id}")
+     *
      * @param int $id A category identifier
      *
      * @return View|JsonResponse
@@ -186,10 +200,11 @@ class ArticleController extends AbstractApiController
      *      {"name"="id", "dataType"="integer", "requirement"="\d+", "description"="article id"}
      *  },
      *  statusCodes={
-     *      200="Returned when successful",
-     *      404="Returned when category is not found"
+     *          200="Returned list of categories",
      *  }
      * )
+     *
+     * @Get("/articles/{id}/category")
      *
      * @param $id
      *
@@ -205,7 +220,7 @@ class ArticleController extends AbstractApiController
     }
 
     /**
-     * Update a category related to article.
+     * Update a category related to article (add another existed category by id)
      *
      * @ApiDoc(
      *  section = "Articles",
@@ -219,6 +234,8 @@ class ArticleController extends AbstractApiController
      *  }
      * )
      *
+     * @Put("/articles/{id}/categories/{cid}")
+     *
      * @param $id
      *
      * @return Category
@@ -227,19 +244,7 @@ class ArticleController extends AbstractApiController
      */
     public function putArticleCategoryAction($id, $cid)
     {
-        $article = $this->getService()->findById($id);
-        $category = $this->getDoctrine()->getRepository(Category::class)->find($cid);
-
-        if (!$category) {
-            throw new NotFoundHttpException(sprintf('Category (%d) not found', $cid));
-        }
-
-        $article->setCategory($category);
-
-        $this->getDoctrine()->getManager()->persist($article);
-        $this->getDoctrine()->getManager()->flush();
-
-        return $article;
+        return $this->getService()->updateChildEntity($id, $cid);
     }
 
     /**
@@ -267,19 +272,10 @@ class ArticleController extends AbstractApiController
         if ($form->isValid()) {
 
             $categoryId = $request->get('category');
-
-            $category = $this->getDoctrine()->getRepository(Category::class)->find($categoryId);
-            if (!$category) {
-                throw new NotFoundHttpException(sprintf('Category (%d) not found ', $categoryId));
-            }
-
             $article = $form->getData();
-            $article->setCategory($category);
 
-            $this->getEntityManager()->persist($article);
-            $this->getEntityManager()->flush();
+            return $this->getService()->saveArticle($article, $categoryId);
 
-            return $article;
         }
 
         return $form;
