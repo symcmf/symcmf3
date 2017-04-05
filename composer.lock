@@ -4,8 +4,67 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "644eeb3b8e93fe8dba5850f4d17796eb",
+    "content-hash": "5d026c4e153418fbefaefaa4ddeedd16",
     "packages": [
+        {
+            "name": "composer/ca-bundle",
+            "version": "1.0.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/composer/ca-bundle.git",
+                "reference": "b17e6153cb7f33c7e44eb59578dc12eee5dc8e12"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/composer/ca-bundle/zipball/b17e6153cb7f33c7e44eb59578dc12eee5dc8e12",
+                "reference": "b17e6153cb7f33c7e44eb59578dc12eee5dc8e12",
+                "shasum": ""
+            },
+            "require": {
+                "ext-openssl": "*",
+                "ext-pcre": "*",
+                "php": "^5.3.2 || ^7.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.5",
+                "psr/log": "^1.0",
+                "symfony/process": "^2.5 || ^3.0"
+            },
+            "suggest": {
+                "symfony/process": "This is necessary to reliably check whether openssl_x509_parse is vulnerable on older php versions, but can be ignored on PHP 5.5.6+"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Composer\\CaBundle\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jordi Boggiano",
+                    "email": "j.boggiano@seld.be",
+                    "homepage": "http://seld.be"
+                }
+            ],
+            "description": "Lets you find a path to the system CA bundle, and includes a fallback to the Mozilla CA bundle.",
+            "keywords": [
+                "cabundle",
+                "cacert",
+                "certificate",
+                "ssl",
+                "tls"
+            ],
+            "time": "2017-03-06T11:59:08+00:00"
+        },
         {
             "name": "doctrine/annotations",
             "version": "v1.2.7",
@@ -1578,16 +1637,16 @@
         },
         {
             "name": "javiereguiluz/easyadmin-bundle",
-            "version": "v1.16.5",
+            "version": "v1.16.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/javiereguiluz/EasyAdminBundle.git",
-                "reference": "68c3263e3184bd5f0b2655b46fad7cfedcbc52b9"
+                "reference": "063125ad8a9246044feada864393226f55527ea7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/javiereguiluz/EasyAdminBundle/zipball/68c3263e3184bd5f0b2655b46fad7cfedcbc52b9",
-                "reference": "68c3263e3184bd5f0b2655b46fad7cfedcbc52b9",
+                "url": "https://api.github.com/repos/javiereguiluz/EasyAdminBundle/zipball/063125ad8a9246044feada864393226f55527ea7",
+                "reference": "063125ad8a9246044feada864393226f55527ea7",
                 "shasum": ""
             },
             "require": {
@@ -1610,8 +1669,10 @@
                 "symfony/polyfill-mbstring": "^1.0",
                 "symfony/property-access": "~2.3|~3.0",
                 "symfony/security-bundle": "~2.3|~3.0",
+                "symfony/translation": "~2.3|~3.0",
                 "symfony/twig-bridge": "^2.3.4|~3.0",
                 "symfony/twig-bundle": "~2.3|~3.0",
+                "symfony/validator": "~2.3|~3.0",
                 "twig/extensions": "~1.0",
                 "twig/twig": "~1.14,>=1.14.2|~2.0"
             },
@@ -1625,7 +1686,6 @@
                 "symfony/dom-crawler": "~2.3|~3.0",
                 "symfony/finder": "~2.3|~3.0",
                 "symfony/phpunit-bridge": "^2.7",
-                "symfony/validator": "~2.3|~3.0",
                 "symfony/var-dumper": "~2.3|~3.0",
                 "symfony/yaml": "~2.3|~3.0"
             },
@@ -1659,7 +1719,7 @@
                 "backend",
                 "generator"
             ],
-            "time": "2017-01-23T10:19:39+00:00"
+            "time": "2017-04-01T08:20:39+00:00"
         },
         {
             "name": "jdorn/sql-formatter",
@@ -1950,16 +2010,16 @@
         },
         {
             "name": "knpuniversity/oauth2-client-bundle",
-            "version": "1.9.0",
+            "version": "1.9.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/knpuniversity/oauth2-client-bundle.git",
-                "reference": "24c9bd84bf010d21beb433e3e9a5a8f8a9bd1efb"
+                "reference": "e830f7cffa0f4b1e3c2ad2d068ab8d1f4ef882f5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/knpuniversity/oauth2-client-bundle/zipball/24c9bd84bf010d21beb433e3e9a5a8f8a9bd1efb",
-                "reference": "24c9bd84bf010d21beb433e3e9a5a8f8a9bd1efb",
+                "url": "https://api.github.com/repos/knpuniversity/oauth2-client-bundle/zipball/e830f7cffa0f4b1e3c2ad2d068ab8d1f4ef882f5",
+                "reference": "e830f7cffa0f4b1e3c2ad2d068ab8d1f4ef882f5",
                 "shasum": ""
             },
             "require": {
@@ -2000,7 +2060,7 @@
                 "oauth",
                 "oauth2"
             ],
-            "time": "2017-01-26T20:32:31+00:00"
+            "time": "2017-03-30T11:12:51+00:00"
         },
         {
             "name": "kriswallsmith/buzz",
@@ -2309,16 +2369,16 @@
         },
         {
             "name": "lusitanian/oauth",
-            "version": "v0.8.9",
+            "version": "v0.8.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Lusitanian/PHPoAuthLib.git",
-                "reference": "29bda6e176df6c292a9b1c43ae8a44d56a87c30b"
+                "reference": "09f4af38f17db6938253f4d1b171d537913ac1ed"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Lusitanian/PHPoAuthLib/zipball/29bda6e176df6c292a9b1c43ae8a44d56a87c30b",
-                "reference": "29bda6e176df6c292a9b1c43ae8a44d56a87c30b",
+                "url": "https://api.github.com/repos/Lusitanian/PHPoAuthLib/zipball/09f4af38f17db6938253f4d1b171d537913ac1ed",
+                "reference": "09f4af38f17db6938253f4d1b171d537913ac1ed",
                 "shasum": ""
             },
             "require": {
@@ -2372,7 +2432,55 @@
                 "oauth",
                 "security"
             ],
-            "time": "2016-02-24T00:20:18+00:00"
+            "time": "2016-07-12T22:15:40+00:00"
+        },
+        {
+            "name": "mattjanssen/api-response-bundle",
+            "version": "v0.1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mattjanssen/api-response-bundle.git",
+                "reference": "78130544deb33d5c01c57c3bb24ef9847b5f9683"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mattjanssen/api-response-bundle/zipball/78130544deb33d5c01c57c3bb24ef9847b5f9683",
+                "reference": "78130544deb33d5c01c57c3bb24ef9847b5f9683",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.4|^7",
+                "sensio/framework-extra-bundle": "^3",
+                "symfony/symfony": "^2.3|^3"
+            },
+            "require-dev": {
+                "jms/serializer-bundle": "^1",
+                "mockery/mockery": "^0.9.5",
+                "phpunit/phpunit": "^4.0"
+            },
+            "suggest": {
+                "jms/serializer-bundle": "For serializing with the JMS Serializer"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-4": {
+                    "MattJanssen\\ApiResponseBundle\\": "src/",
+                    "MattJanssen\\ApiResponseBundle\\Test\\": "tests/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Matt Janssen",
+                    "email": "matt@mattjanssen.com"
+                }
+            ],
+            "description": "Symfony bundle for transforming controller action returns and exceptions into JSON API responses",
+            "homepage": "https://github.com/mattjanssen/api-response-bundle",
+            "time": "2016-12-31T02:17:38+00:00"
         },
         {
             "name": "michelf/php-markdown",
@@ -2711,20 +2819,20 @@
         },
         {
             "name": "nilportugues/json-api",
-            "version": "2.5.0",
+            "version": "2.5.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nilportugues/php-json-api.git",
-                "reference": "f2c67720de7e0fa84930a22d5e644eed5f6b7440"
+                "reference": "eb8841348fcabbce39b9d5c93095818d51cbf53f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nilportugues/php-json-api/zipball/f2c67720de7e0fa84930a22d5e644eed5f6b7440",
-                "reference": "f2c67720de7e0fa84930a22d5e644eed5f6b7440",
+                "url": "https://api.github.com/repos/nilportugues/php-json-api/zipball/eb8841348fcabbce39b9d5c93095818d51cbf53f",
+                "reference": "eb8841348fcabbce39b9d5c93095818d51cbf53f",
                 "shasum": ""
             },
             "require": {
-                "nilportugues/api-transformer": "^3.0.0",
+                "nilportugues/api-transformer": "~3.0.0",
                 "php": ">=5.5.0",
                 "symfony/psr-http-message-bridge": "^0.2|^0.3"
             },
@@ -2761,7 +2869,7 @@
                 "serializer",
                 "transformer"
             ],
-            "time": "2017-03-13T15:42:37+00:00"
+            "time": "2017-04-04T11:42:18+00:00"
         },
         {
             "name": "nilportugues/jsonapi-bundle",
@@ -2823,16 +2931,16 @@
         },
         {
             "name": "nilportugues/serializer",
-            "version": "1.1.5",
+            "version": "1.2",
             "source": {
                 "type": "git",
-                "url": "https://github.com/nilportugues/serializer.git",
-                "reference": "82ede04c687336aaec5f1c58f3ec986626b05810"
+                "url": "https://github.com/nilportugues/php-serializer.git",
+                "reference": "57464fa2b8983fe373ae9039c34f9c5178773f7e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nilportugues/serializer/zipball/82ede04c687336aaec5f1c58f3ec986626b05810",
-                "reference": "82ede04c687336aaec5f1c58f3ec986626b05810",
+                "url": "https://api.github.com/repos/nilportugues/php-serializer/zipball/57464fa2b8983fe373ae9039c34f9c5178773f7e",
+                "reference": "57464fa2b8983fe373ae9039c34f9c5178773f7e",
                 "shasum": ""
             },
             "require": {
@@ -3363,19 +3471,20 @@
         },
         {
             "name": "sensiolabs/security-checker",
-            "version": "v4.0.2",
+            "version": "v4.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sensiolabs/security-checker.git",
-                "reference": "56bded66985e22f6eac2cf86735fd21c625bff2f"
+                "reference": "9e69eddf3bc49d1ee5c7908564da3141796d4bbc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sensiolabs/security-checker/zipball/56bded66985e22f6eac2cf86735fd21c625bff2f",
-                "reference": "56bded66985e22f6eac2cf86735fd21c625bff2f",
+                "url": "https://api.github.com/repos/sensiolabs/security-checker/zipball/9e69eddf3bc49d1ee5c7908564da3141796d4bbc",
+                "reference": "9e69eddf3bc49d1ee5c7908564da3141796d4bbc",
                 "shasum": ""
             },
             "require": {
+                "composer/ca-bundle": "^1.0",
                 "symfony/console": "~2.7|~3.0"
             },
             "bin": [
@@ -3403,7 +3512,7 @@
                 }
             ],
             "description": "A security checker for your composer.lock",
-            "time": "2017-03-09T17:33:20+00:00"
+            "time": "2017-03-31T14:50:32+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -3461,16 +3570,16 @@
         },
         {
             "name": "symfony/monolog-bundle",
-            "version": "v3.0.3",
+            "version": "v3.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/monolog-bundle.git",
-                "reference": "ebce76a39a65495a66c34eb1574cc4b9e35a4e64"
+                "reference": "6f96c7dbb6b2ef70b307a1a6f897153cbca3da47"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/monolog-bundle/zipball/ebce76a39a65495a66c34eb1574cc4b9e35a4e64",
-                "reference": "ebce76a39a65495a66c34eb1574cc4b9e35a4e64",
+                "url": "https://api.github.com/repos/symfony/monolog-bundle/zipball/6f96c7dbb6b2ef70b307a1a6f897153cbca3da47",
+                "reference": "6f96c7dbb6b2ef70b307a1a6f897153cbca3da47",
                 "shasum": ""
             },
             "require": {
@@ -3517,7 +3626,7 @@
                 "log",
                 "logging"
             ],
-            "time": "2017-01-10T20:01:51+00:00"
+            "time": "2017-03-26T11:55:59+00:00"
         },
         {
             "name": "symfony/polyfill-apcu",

@@ -61,7 +61,7 @@ abstract class AbstractApiController extends FOSRestController
         $objects = $this->getService()->getList($filter);
         $view = $this->view($objects, Response::HTTP_OK)->setHeader('X-Total-Count', $this->getService()->getTotalCount());
 
-        return $this->handleView($view);
+        return $objects;
     }
 
     /**

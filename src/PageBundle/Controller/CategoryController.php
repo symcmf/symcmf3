@@ -11,7 +11,9 @@ use FOS\RestBundle\Controller\Annotations\Put;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Request\ParamFetcherInterface;
 use FOS\RestBundle\View\View;
+use MattJanssen\ApiResponseBundle\Annotation\ApiResponse;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
+use NilPortugues\Symfony\JsonApiBundle\Serializer\JsonApiResponseTrait;
 use PageBundle\Entity\Article;
 use PageBundle\Entity\Category;
 use PageBundle\Form\CategoryType;
@@ -24,6 +26,9 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class CategoryController extends AbstractApiController
 {
+
+    use JsonApiResponseTrait;
+
     /**
      * @return object
      */
@@ -59,7 +64,7 @@ class CategoryController extends AbstractApiController
      * @param Request $request the request object
      * @param ParamFetcherInterface $paramFetcher param fetcher service
      *
-     * @Get("/categories", name="_categories")
+     * @Get("/categories")
      *
      * @return array
      */
@@ -82,7 +87,7 @@ class CategoryController extends AbstractApiController
      *  }
      * )
      *
-     * @Get("/categories/{id}", name="_categories")
+     * @Get("/categories/{id}")
      *
      * @param $id
      *
@@ -112,13 +117,16 @@ class CategoryController extends AbstractApiController
      *      }
      * )
      *
-     * @Post("/categories", name="_categories")
+     * @Post("/categories")
      *
      * @param Request $request A Symfony request
      *
      * @return Category|Form
      *
      * @throws NotFoundHttpException
+     *
+     * @ApiResponse(httpCode=201)
+     *
      */
     public function postCategoryAction(Request $request)
     {
@@ -145,10 +153,10 @@ class CategoryController extends AbstractApiController
      *      }
      * )
      *
+     * @Put("/categories/{id}")
+     *
      * @param int $id A category template identifier
      * @param Request $request A Symfony request
-     *
-     * @Put("/categories/{id}", name="_categories")
      *
      * @return Category
      *
@@ -174,7 +182,7 @@ class CategoryController extends AbstractApiController
      *      }
      * )
      *
-     * @Delete("/categories/{id}", name="_categories")
+     * @Delete("/categories/{id}")
      *
      * @param int $id A category identifier
      *
@@ -202,7 +210,7 @@ class CategoryController extends AbstractApiController
      *      }
      * )
      *
-     * @Get("/categories/{id}/articles/{aid}", name="_categories_articles")
+     * @Get("/categories/{id}/articles/{aid}")
      *
      * @param $id
      * @param $aid
@@ -240,7 +248,7 @@ class CategoryController extends AbstractApiController
      * @QueryParam(name="_sortField", nullable=true, description="Sort field.")
      * @QueryParam(name="_sortDir", nullable=true, description="Sort direction.")
      *
-     * @Get("/categories/{id}/articles", name="_categories_articles")
+     * @Get("/categories/{id}/articles")
      *
      * @param $id
      * @param ParamFetcherInterface $paramFetcher param fetcher service
@@ -270,7 +278,7 @@ class CategoryController extends AbstractApiController
      *      }
      * )
      *
-     * @Delete("/categories/{id}/articles/{aid}", name="_categories_articles")
+     * @Delete("/categories/{id}/articles/{aid}")
      *
      * @param int $id A category identifier
      * @param int $aid

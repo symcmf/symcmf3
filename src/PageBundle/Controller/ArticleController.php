@@ -3,6 +3,7 @@
 namespace PageBundle\Controller;
 
 use AppBundle\Controller\AbstractApiController;
+use Doctrine\Common\Util\ClassUtils;
 use FOS\RestBundle\Controller\Annotations\Delete;
 use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\Post;
@@ -11,6 +12,7 @@ use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Request\ParamFetcherInterface;
 use FOS\RestBundle\View\View;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
+use NilPortugues\Symfony\JsonApiBundle\Serializer\JsonApiResponseTrait;
 use PageBundle\Entity\Article;
 use PageBundle\Entity\Category;
 use PageBundle\Form\ArticleType;
@@ -62,7 +64,7 @@ class ArticleController extends AbstractApiController
      * @param Request $request the request object
      * @param ParamFetcherInterface $paramFetcher param fetcher service
      *
-     * @Get("/articles", name="_articles")
+     * @Get("/articles")
      *
      * @return array
      */
@@ -85,7 +87,7 @@ class ArticleController extends AbstractApiController
      *  }
      * )
      *
-     * @Get("/articles/{id}", name="_articles")
+     * @Get("/articles/{id}")
      *
      * @param $id
      *
@@ -115,7 +117,7 @@ class ArticleController extends AbstractApiController
      *  }
      * )
      *
-     * @Post("/articles", name="_articles")
+     * @Post("/articles")
      *
      * @param Request $request A Symfony request
      *
@@ -149,7 +151,7 @@ class ArticleController extends AbstractApiController
      *  }
      * )
      *
-     * @Put("/articles/{id}", name="_articles")
+     * @Put("/articles/{id}")
      *
      * @param int $id A category template identifier
      * @param Request $request A Symfony request
@@ -178,7 +180,7 @@ class ArticleController extends AbstractApiController
      *  }
      * )
      *
-     * @Delete("/articles/{id}", name="_articles")
+     * @Delete("/articles/{id}")
      *
      * @param int $id A category identifier
      *
@@ -204,7 +206,7 @@ class ArticleController extends AbstractApiController
      *  }
      * )
      *
-     * @Get("/articles/{id}/category", name="_articles_category")
+     * @Get("/articles/{id}/category")
      *
      * @param $id
      *
@@ -220,7 +222,7 @@ class ArticleController extends AbstractApiController
     }
 
     /**
-     * Update a category related to article.
+     * Update a category related to article (add another existed category by id)
      *
      * @ApiDoc(
      *  section = "Articles",
@@ -234,7 +236,7 @@ class ArticleController extends AbstractApiController
      *  }
      * )
      *
-     * @Put("/articles/{id}/categories/{cid}", name="_articles_category")
+     * @Put("/articles/{id}/categories/{cid}")
      *
      * @param $id
      *
