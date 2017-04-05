@@ -6,9 +6,11 @@ use AppBundle\Services\AbstractApiService;
 use AuthBundle\Entity\Role;
 use AuthBundle\Entity\User;
 use AuthBundle\Entity\UserRole;
+use AuthBundle\Repository\UserRoleRepository;
 use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
@@ -318,5 +320,52 @@ class UserService extends AbstractApiService
         $this->saveObject($userRole);
 
         return $userRole;
+    }
+
+    /**
+     * @param $id
+     * @param $rid
+     */
+    public function removeUserRole($id, $rid)
+    {
+        $this->checkUserAndRole($id, $rid);
+
+        /** @var UserRoleRepository $userRoleRepository */
+        $userRoleRepository = $this->entityManager->getRepository(UserRole::class);
+        $usersRoles = $userRoleRepository->getUserRoleByUserIdAndRoleId($id, $rid);
+
+        foreach ($usersRoles as $userRole) {
+            $this->entityManager->remove($userRole);
+        }
+        $this->entityManager->flush();
+    }
+
+    /**
+     * @param $id
+     * @param $rid
+     * @return null
+     */
+    public function postUserRole($id, $rid)
+    {
+        $this->checkUserAndRole($id, $rid);
+
+        /** @var User $user */
+        $user =  $this->getUserById($id);
+
+        /** @var Role $role */
+        $role =  $this->getRoleById($rid);
+
+        /** @var UserRoleRepository $userRoleRepository */
+        $userRoleRepository = $this->entityManager->getRepository(UserRole::class);
+        $usersRoles = $userRoleRepository->getUserRoleByUserIdAndRoleId($id, $rid);
+
+        if ($usersRoles) {
+            throw new BadRequestHttpException(sprintf('User with this roleId: (%d) already exists', $data['rid']));
+        }
+
+        $userRole = $this->saveUserRole($user, $role);
+        $user->addRole($userRole);
+
+        return $this->saveObject($user);
     }
 }

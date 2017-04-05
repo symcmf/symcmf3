@@ -339,28 +339,8 @@ class UserController extends AbstractApiController
     public function postUserRoleAction($id, Request $request)
     {
         $data = json_decode($request->getContent(), true);
-        $service = $this->getService();
 
-        $this->getService()->checkUserAndRole($id, $data['rid']);
-
-        /** @var User $user */
-        $user =  $service->getUserById($id);
-
-        /** @var Role $role */
-        $role =  $service->getRoleById($data['rid']);
-
-        /** @var UserRoleRepository $userRoleRepository */
-        $userRoleRepository = $this->getEntityManager()->getRepository(UserRole::class);
-        $usersRoles = $userRoleRepository->getUserRoleByUserIdAndRoleId($id, $data['rid']);
-
-        if ($usersRoles) {
-            throw new BadRequestHttpException(sprintf('User with this roleId: (%d) already exists', $data['rid']));
-        }
-
-        $userRole = $service->saveUserRole($user, $role);
-        $user->addRole($userRole);
-
-        return $this->getService()->saveObject($user);
+        return $this->getService()->postUserRole($id, $data['rid']);
     }
 
     /**
@@ -390,16 +370,7 @@ class UserController extends AbstractApiController
      */
     public function deleteUserRoleAction($id, $rid)
     {
-        $this->getService()->checkUserAndRole($id, $rid);
-
-        /** @var UserRoleRepository $userRoleRepository */
-        $userRoleRepository = $this->getEntityManager()->getRepository(UserRole::class);
-        $usersRoles = $userRoleRepository->getUserRoleByUserIdAndRoleId($id, $rid);
-
-        foreach ($usersRoles as $userRole) {
-            $this->getEntityManager()->remove($userRole);
-        }
-        $this->getEntityManager()->flush();
+        $this->getService()->removeUserRole($id, $rid);
 
         return new JsonResponse([], Response::HTTP_NO_CONTENT);
     }
